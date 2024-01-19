@@ -2,17 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 
+// hardcoded now, TODO -- will use DMA later.
 #define NAME_SIZE 20
 #define LOCATION_COUNT 3
 #define PLACEMENT_COUNT 5
-
-// struct for locations
-struct locationOutline 
-{
-    char locationName[NAME_SIZE];
-    long long int placementList;
-    long long int totalAmountStolen;
-};
 
 // struct for individual placements 
 struct placementOutline
@@ -23,24 +16,40 @@ struct placementOutline
     long long int individualAmountStolen;
 };
 
+
+// struct for locations
+struct locationOutline 
+{
+    char locationName[NAME_SIZE];
+    struct placementOutline placementList[PLACEMENT_COUNT];
+    long long int totalAmountStolen;
+};
+
+
+
 int main() 
 {
-    int i = 0;
-    int endToken = -1;
-    int numEntries = 0;
+    int i = 0; // for loop usage 
+    long long int endToken = -1; // setting up endToken for do,while loop
+    int numEntries = 0; // use in for loop, printing out results
 
-    struct locationOutline locations[30];
-    struct placementOutline placements[30];
+    struct locationOutline locations[30]; // instance of array of structs
 
+
+
+    // scan for entries, terminate when "END -1 -1" is entered 
     do
     {
-        scanf("%s %lld %lld", locations[i].locationName, &placements[i].ID, &placements[i].foodLevel);
+        scanf("%s %lld %lld", locations[i].locationName, &locations[i].placementList[i].ID, &locations[i].placementList[i].foodLevel); // scan for req. info
         i++; numEntries++;
-    } while (endToken != placements[i].ID);
+    } while (locations[i - 1].placementList[i - 1].ID != endToken); // will be active until a "-1" is scanned into an ID slot
     
-    for (int i = 0; i < numEntries; i++)
+
+
+    // print out the results 
+    for (int i = 0; i < numEntries - 1; i++) // subtract by 1 so we dont print out the "END -1 -1"
     {
-        printf("%s\n", locations[i].locationName);
+        printf("%s %lld %lld\n", locations[i].locationName, locations[i].placementList[i].ID, locations[i].placementList[i].foodLevel);
     }
 
     return 0;
