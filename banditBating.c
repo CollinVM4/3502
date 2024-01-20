@@ -25,6 +25,13 @@ struct locationOutline
     long long int totalAmountStolen;
 };
 
+struct TEMPlocationOutline 
+{
+    char locationName[NAME_SIZE];
+    struct placementOutline placementList[PLACEMENT_COUNT];
+    long long int totalAmountStolen;
+};
+
 
 
 int main() 
@@ -35,14 +42,16 @@ int main()
 
 
     struct locationOutline locations[30]; // instance of array of structs
+    struct TEMPlocationOutline TEMPlocations[30]; // instance of array of structs
+
 
 
     // scan for entries, terminate when "END -1 -1" is entered 
     do
     {
         // scan for req. info
-        scanf("%s %lld %lld", locations[i].locationName, &locations[i].placementList[i].ID, 
-        &locations[i].placementList[i].foodLevel);
+        scanf("%s %lld %lld", TEMPlocations[i].locationName, &TEMPlocations[i].placementList[i].ID, 
+        &TEMPlocations[i].placementList[i].foodLevel);
 
         // increase indexes
         i++; numEntries++;
@@ -64,6 +73,16 @@ int main()
                 }
             } 
         };
+
+
+        // new entry logic, if yes, assign temp values to main struct 
+        if (isNew == 1)
+        {
+            strcpy(locations[i].locationName, TEMPlocations[i].locationName);
+            locations[i].placementList[i].ID = TEMPlocations[i].placementList[i].ID;
+            locations[i].placementList[i].foodLevel = TEMPlocations[i].placementList[i].foodLevel;
+        };
+        
         
         // check food logic
         if (checkFood == 1) 
