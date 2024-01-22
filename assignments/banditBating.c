@@ -60,15 +60,19 @@ int main()
         // walk list to determine if entry is new 
         for (int j = 0; j < numEntries; j++) // loop through all names
         {
-            if (strcmp(locations[i].locationName, locations[j].locationName) == 0) // 0 is equal, anything else is not equal
+            if (strcmp(locations[i].locationName /*current entry*/, locations[j].locationName /*will need to fix*/) == 0) // 0 is equal, anything else is not equal
             {
-                // now check if new placement
-                for (int k = 0; k < numEntries; k++) // loop through all placements
+                // now check if new sub-placement
+                for (int k = 0; k < numEntries; k++) // loop through sub-placements
                 {
-                    if(locations[i].placementList[i].ID == locations[k].placementList[k].ID) // not new 
+                    if(locations[i].placementList[i].ID /*current entry*/== locations[k].placementList[k].ID/*will need to fix*/) // if not new 
                     {
                         checkFood = 1; // will run check food block
                         isNew = 0; // will not add to main struct list 
+                    } else // if new 
+                    {
+                        checkFood = 0; // will not run check food block
+                        isNew = 1; // will be added to main struct list
                     }
                 }
             } 
