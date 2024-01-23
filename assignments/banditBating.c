@@ -38,53 +38,64 @@ int main()
 {
     int i = 0; // for loop usage 
     long long int endToken = -1; // setting up endToken for do,while loop
-    int numEntries, isNew, checkFood = 0; // use in for loop, printing out results
+    int numEntries = 0; // use in for loop, printing out results
 
 
-    struct locationOutline locations[30]; // instance of array of structs
-    struct TEMPlocationOutline TEMPlocations[30]; // instance of array of structs
+    struct locationOutline locations[30] = {0}; // instance of array of structs
+    struct TEMPlocationOutline TEMPlocations[30] = {0}; // instance of array of structs
 
 
 
     // scan for entries, terminate when "END -1 -1" is entered 
     do
     {
+        printf("start do while loop\n");
+        int isNew = 1, checkFood = 0; // initialize/turn off
         // scan for req. info
         scanf("%s %lld %lld", TEMPlocations[i].locationName, &TEMPlocations[i].placementList[i].ID, 
         &TEMPlocations[i].placementList[i].foodLevel);
 
         // increase indexes
         i++; numEntries++;
+
         
 
         // walk list to determine if entry is new 
         for (int j = 0; j < numEntries; j++) // loop through all names
         {
-            if (strcmp(locations[i].locationName /*current entry*/, locations[j].locationName /*will need to fix*/) == 0) // 0 is equal, anything else is not equal
+            printf("outer for loop\n");
+
+            printf("\ntempNAME [%s] bankedNAME [%s]\n", TEMPlocations[i-1].locationName, locations[j].locationName);
+            if (strcmp(TEMPlocations[i-1].locationName /*current entry*/, locations[j].locationName /*will need to fix*/) == 0) // 0 is equal, anything else is not equal
             {
                 // now check if new sub-placement
                 for (int k = 0; k < numEntries; k++) // loop through sub-placements
-                {
-                    if(locations[i].placementList[i].ID /*current entry*/== locations[k].placementList[k].ID/*will need to fix*/) // if not new 
+                {   printf("\ntempPLACE [%lld] bankedPLACE [%lld]\n", TEMPlocations[i-1].placementList[i-1].ID, locations[j].placementList[k].ID);
+                    if(TEMPlocations[i-1].placementList[i-1].ID /*current entry*/== locations[j].placementList[k].ID/*will need to fix*/) // if not new 
                     {
                         checkFood = 1; // will run check food block
                         isNew = 0; // will not add to main struct list 
-                    } else // if new 
-                    {
-                        checkFood = 0; // will not run check food block
-                        isNew = 1; // will be added to main struct list
-                    }
+                        printf("set isNew = 0\n");
+                        break;;
+                    } 
                 }
+            }
+            else
+            {
+                isNew = 1;
+                printf("set isNew = 1\n");
+                break;
+
             } 
         };
-
 
         // new entry logic, if yes, assign temp values to main struct 
         if (isNew == 1)
         {
-            strcpy(locations[i].locationName, TEMPlocations[i].locationName);
-            locations[i].placementList[i].ID = TEMPlocations[i].placementList[i].ID;
-            locations[i].placementList[i].foodLevel = TEMPlocations[i].placementList[i].foodLevel;
+            strcpy(locations[i-1].locationName, TEMPlocations[i-1].locationName);
+            locations[i-1].placementList[i-1].ID = TEMPlocations[i-1].placementList[i-1].ID;
+            locations[i-1].placementList[i-1].foodLevel = TEMPlocations[i-1].placementList[i-1].foodLevel;
+            printf("isNew logic \n");
         };
         
         
@@ -105,10 +116,6 @@ int main()
             } 
         }
         
-
-
-
-
     } while (locations[i - 1].placementList[i - 1].ID != endToken); // will be active until a "-1" is scanned into an ID slot
     
 
