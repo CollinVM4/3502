@@ -59,6 +59,7 @@ int main()
         i++;
 
         // fix for before comparing through prev entries 
+        // maybe check all locations, make a flag to notify that match, then further check placement
 
         // walk list to determine if entry is new 
         for (int j = 0; j < numEntries; j++) // loop through all names
