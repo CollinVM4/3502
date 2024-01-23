@@ -38,7 +38,7 @@ int main()
 {
     int i = 0; // for loop usage 
     long long int endToken = -1; // setting up endToken for do,while loop
-    int numEntries = 0; // use in for loop, printing out results
+    int numEntries = 1; // use in for loop, printing out results
 
 
     struct locationOutline locations[30] = {0}; // instance of array of structs
@@ -56,27 +56,27 @@ int main()
         &TEMPlocations[i].placementList[i].foodLevel);
 
         // increase indexes
-        i++; numEntries++;
+        i++;
 
-        
+        // fix for before comparing through prev entries 
 
         // walk list to determine if entry is new 
         for (int j = 0; j < numEntries; j++) // loop through all names
         {
             printf("outer for loop\n");
 
-            printf("\ntempNAME [%s] bankedNAME [%s]\n", TEMPlocations[i-1].locationName, locations[j].locationName);
+            printf("tempNAME [%s] bankedNAME [%s]\n", TEMPlocations[i-1].locationName, locations[j].locationName);
             if (strcmp(TEMPlocations[i-1].locationName /*current entry*/, locations[j].locationName /*will need to fix*/) == 0) // 0 is equal, anything else is not equal
             {
                 // now check if new sub-placement
                 for (int k = 0; k < numEntries; k++) // loop through sub-placements
-                {   printf("\ntempPLACE [%lld] bankedPLACE [%lld]\n", TEMPlocations[i-1].placementList[i-1].ID, locations[j].placementList[k].ID);
+                {   printf("temppPlacement [%lld] storedPlacement, [%lld] , indexj[%d] indexk[%d] indexi[%d]\n", TEMPlocations[i-1].placementList[i-1].ID, locations[j].placementList[k].ID, j, k, i-1);
                     if(TEMPlocations[i-1].placementList[i-1].ID /*current entry*/== locations[j].placementList[k].ID/*will need to fix*/) // if not new 
                     {
                         checkFood = 1; // will run check food block
                         isNew = 0; // will not add to main struct list 
-                        printf("set isNew = 0\n");
-                        break;;
+                        printf("did not add to main struct\n");
+                        break;
                     } 
                 }
             }
@@ -85,7 +85,6 @@ int main()
                 isNew = 1;
                 printf("set isNew = 1\n");
                 break;
-
             } 
         };
 
@@ -95,7 +94,8 @@ int main()
             strcpy(locations[i-1].locationName, TEMPlocations[i-1].locationName);
             locations[i-1].placementList[i-1].ID = TEMPlocations[i-1].placementList[i-1].ID;
             locations[i-1].placementList[i-1].foodLevel = TEMPlocations[i-1].placementList[i-1].foodLevel;
-            printf("isNew logic \n");
+            printf("added to main struct\n");
+            numEntries++;
         };
         
         
@@ -132,7 +132,7 @@ int main()
 
 
     // print out the results 
-    for (int i = 0; i < numEntries - 1; i++) // subtract by 1 so we dont print out the "END -1 -1"
+    for (int i = 0; i < numEntries - 2; i++) // subtract by 2 so we dont print out the "END -1 -1"
     {
         printf("%s %lld %lld\n", locations[i].locationName, locations[i].placementList[i].ID, locations[i].placementList[i].foodLevel);
     }
