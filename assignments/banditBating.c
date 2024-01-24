@@ -39,6 +39,7 @@ int main()
     int i = 0; // for loop usage 
     long long int endToken = -1; // setting up endToken for do,while loop
     int numEntries = 1; // use in for loop, printing out results
+    int isNew = 1, checkFood = 0;
 
 
     struct locationOutline locations[30] = {0}; // instance of array of structs
@@ -50,54 +51,42 @@ int main()
     do
     {
         printf("start do while loop\n");
-        int isNew = 1, checkFood = 0; // initialize/turn off
+
         // scan for req. info
         scanf("%s %lld %lld", TEMPlocations[i].locationName, &TEMPlocations[i].placementList[i].ID, 
         &TEMPlocations[i].placementList[i].foodLevel);
 
-        // increase indexes
-        i++;
+
 
         // fix for before comparing through prev entries 
         // maybe check all locations, make a flag to notify that match, then further check placement
 
-        // walk list to determine if entry is new 
-        for (int j = 0; j < numEntries; j++) // loop through all names
-        {
-            printf("outer for loop\n");
+            for (int j = 0; j < numEntries; j++)
+            {   /*debug*/printf("tempNAME [%s] bankedNAME [%s]\n", TEMPlocations[i].locationName, locations[j].locationName);
 
-            printf("tempNAME [%s] bankedNAME [%s]\n", TEMPlocations[i-1].locationName, locations[j].locationName);
-            if (strcmp(TEMPlocations[i-1].locationName /*current entry*/, locations[j].locationName /*will need to fix*/) == 0) // 0 is equal, anything else is not equal
-            {
-                // now check if new sub-placement
-                for (int k = 0; k < numEntries; k++) // loop through sub-placements
-                {   printf("temppPlacement [%lld] storedPlacement, [%lld] , indexj[%d] indexk[%d] indexi[%d]\n", TEMPlocations[i-1].placementList[i-1].ID, locations[j].placementList[k].ID, j, k, i-1);
-                    if(TEMPlocations[i-1].placementList[i-1].ID /*current entry*/== locations[j].placementList[k].ID/*will need to fix*/) // if not new 
+                if (strcmp(TEMPlocations[i].locationName, locations[j].locationName) != 0 
+                    || TEMPlocations[i].placementList[i].ID != locations[j].placementList[j].ID)
+                {
+                    checkFood = 0; isNew = 1;
+                } else
+                {
+                    /*debug*/printf("did not add to main struct\n");
+                    checkFood = 1; isNew = 0;
+                } 
+
+                    // new entry logic, if yes, assign temp values to main struct 
+                    if (isNew == 1)
                     {
-                        checkFood = 1; // will run check food block
-                        isNew = 0; // will not add to main struct list 
-                        printf("did not add to main struct\n");
+                        strcpy(locations[i].locationName, TEMPlocations[i].locationName);
+                        locations[i].placementList[i].ID = TEMPlocations[i].placementList[i].ID;
+                        locations[i].placementList[i].foodLevel = TEMPlocations[i].placementList[i].foodLevel;
+                        numEntries++;
+                        printf("added to main struct\n");
                         break;
-                    } 
-                }
+                    };
             }
-            else
-            {
-                isNew = 1;
-                printf("set isNew = 1\n");
-                break;
-            } 
-        };
 
-        // new entry logic, if yes, assign temp values to main struct 
-        if (isNew == 1)
-        {
-            strcpy(locations[i-1].locationName, TEMPlocations[i-1].locationName);
-            locations[i-1].placementList[i-1].ID = TEMPlocations[i-1].placementList[i-1].ID;
-            locations[i-1].placementList[i-1].foodLevel = TEMPlocations[i-1].placementList[i-1].foodLevel;
-            printf("added to main struct\n");
-            numEntries++;
-        };
+
         
         
         // check food logic
@@ -117,6 +106,9 @@ int main()
             } 
         }
         
+        // increase index
+        i++;
+
     } while (locations[i - 1].placementList[i - 1].ID != endToken); // will be active until a "-1" is scanned into an ID slot
     
 
