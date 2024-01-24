@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 
+
 // hardcoded now, TODO -- will use DMA later.
 #define NAME_SIZE 20
 #define LOCATION_COUNT 3
 #define PLACEMENT_COUNT 5
+
 
 // struct for individual placements 
 struct placementOutline
@@ -25,12 +27,24 @@ struct locationOutline
     long long int totalAmountStolen;
 };
 
+
 struct TEMPlocationOutline 
 {
     char locationName[NAME_SIZE];
     struct placementOutline placementList[PLACEMENT_COUNT];
     long long int totalAmountStolen;
 };
+
+
+int compareEntry(struct TEMPlocationOutline* entry1, struct locationOutline* entry2)
+{
+    int isNew = 0;
+    if (strcmp(entry1->locationName, entry2->locationName) != 0 || entry1->placementList->ID != entry2->placementList->ID)
+    {
+        isNew = 1;
+    }
+    return isNew;
+}
 
 
 
@@ -46,7 +60,6 @@ int main()
     struct TEMPlocationOutline TEMPlocations[30] = {0}; // instance of array of structs
 
 
-
     // scan for entries, terminate when "END -1 -1" is entered 
     do
     {
@@ -55,7 +68,6 @@ int main()
         // scan for req. info
         scanf("%s %lld %lld", TEMPlocations[i].locationName, &TEMPlocations[i].placementList[i].ID, 
         &TEMPlocations[i].placementList[i].foodLevel);
-
 
 
         // fix for before comparing through prev entries 
@@ -71,8 +83,9 @@ int main()
                 } else
                 {
                     /*debug*/printf("did not add to main struct\n");
-                    checkFood = 1; isNew = 0;
+                    checkFood = 1; isNew = 0; break;
                 } 
+
 
                     // new entry logic, if yes, assign temp values to main struct 
                     if (isNew == 1)
@@ -106,6 +119,7 @@ int main()
             } 
         }
         
+
         // increase index
         i++;
 
