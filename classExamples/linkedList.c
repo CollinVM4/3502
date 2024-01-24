@@ -76,7 +76,7 @@ Node * createNode(int data)
 
     //initialization
     ret->data = data;
-    ret->data = NULL; // used to avoid dangling pointer
+    ret->next = NULL; // used to avoid dangling pointer
 
     return ret; // return the init protected block of memory
 }
