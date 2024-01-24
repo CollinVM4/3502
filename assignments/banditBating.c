@@ -38,14 +38,36 @@ struct TEMPlocationOutline
 
 int compareEntry(struct TEMPlocationOutline* entry1, struct locationOutline* entry2)
 {
+    /*debug*/printf("entry1[%s] entry2[%s]\n", entry1->locationName, entry2->locationName);
+
     int isNew = 0;
     if (strcmp(entry1->locationName, entry2->locationName) != 0 || entry1->placementList->ID != entry2->placementList->ID)
     {
-        isNew = 1;
+        isNew = 0; // 0 = new
+    } else
+    {
+        isNew = 1; // 1 = not new
     }
     return isNew;
 }
 
+
+int checkFood(struct locationOutline* curEntry)
+{
+    int curFoodLevel = curEntry->placementList->foodLevel;
+    int prevFoodLevel = curEntry->placementList->prevFoodLevel;
+    int maxFoodStolen = 0;
+
+    if (curFoodLevel < prevFoodLevel) // less now than previously
+    {
+        maxFoodStolen = prevFoodLevel - curFoodLevel;
+    } else if (curFoodLevel == prevFoodLevel || curFoodLevel > prevFoodLevel) // more or equal than previously
+    {
+        maxFoodStolen = 0;
+    }
+
+    return maxFoodStolen;
+}
 
 
 int main() 
