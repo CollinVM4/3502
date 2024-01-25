@@ -35,6 +35,7 @@ struct TEMPlocationOutline
     long long int totalAmountStolen;
 };
 
+
 void addToList(struct TEMPlocationOutline* tempStruct, struct locationOutline* mainStruct)
 {
     printf("added to list\n");
@@ -104,7 +105,6 @@ int main()
     // scan for entries, terminate when "END -1 -1" is entered 
     do
     {
-        printf("start do while loop\n");
         // scan for req. info
         scanf("%s %lld %lld", TEMPlocations[i].locationName, &TEMPlocations[i].placementList->ID, 
         &TEMPlocations[i].placementList->foodLevel);
@@ -114,26 +114,21 @@ int main()
             int temp = compareEntry(&TEMPlocations[i], &locations[j]);
             matchFound += temp;
             printf("match found value[%d]\n", matchFound);
+
+            if (matchFound < 1) // 1 = No matches found 
+            {
+                addToList(&TEMPlocations[i], &locations[i]);
+                numEntries++;
+                matchFound=0;
+                break;
+            }
+
+            if (matchFound >= 1)
+            {
+                checkFood(&locations[i]);
+                break;
+            }
         }
-        
-        if (matchFound < 1) // 1 = No matches found 
-        {
-            printf("new entry\n");
-            addToList(&TEMPlocations[i], &locations[i]);
-            numEntries++;
-        }
-
-        if (matchFound >= 1)
-        {
-            printf("existing entry\n");
-            checkFood(&locations[i]);
-        }
-        
-        
-
-            
-
-
         
         
     
