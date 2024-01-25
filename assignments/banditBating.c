@@ -5,8 +5,8 @@
 
 // hardcoded now, TODO -- will use DMA later.
 #define NAME_SIZE 20
-#define LOCATION_COUNT 3
-#define PLACEMENT_COUNT 5
+#define LOCATION_COUNT 10
+#define PLACEMENT_COUNT 15
 
 
 // struct for individual placements 
@@ -53,7 +53,7 @@ int compareEntry(struct TEMPlocationOutline* entry1, struct locationOutline* ent
     /*debug*/printf("entry1[%s] entry2[%s]\n", entry1->locationName, entry2->locationName);
 
     int match = 0;
-    if (strcmp(entry1->locationName, entry2->locationName) != 0 || entry1->placementList->ID != entry2->placementList->ID)
+    if (strcmp(entry1->locationName, entry2->locationName) != 0 && entry1->placementList->ID != entry2->placementList->ID)
     {
         match = 0; // 0 = new 
         printf("new\n");
@@ -112,19 +112,20 @@ int main()
         for (int j = 0; j < numEntries; j++)
         {
             int temp = compareEntry(&TEMPlocations[i], &locations[j]);
-            temp += matchFound;
+            matchFound += temp;
+            printf("match found value[%d]\n", matchFound);
         }
         
         if (matchFound < 1) // 1 = No matches found 
         {
-            printf("match not Found\n");
+            printf("new entry\n");
             addToList(&TEMPlocations[i], &locations[i]);
             numEntries++;
         }
 
         if (matchFound >= 1)
         {
-            printf("match found\n");
+            printf("existing entry\n");
             checkFood(&locations[i]);
         }
         
@@ -143,14 +144,6 @@ int main()
 
     } while (locations[i - 1].placementList->ID != endToken); // will be active until a "-1" is scanned into an ID slot
     
-
-
-
-
-
-
-
-
 
 
 
