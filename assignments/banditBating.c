@@ -35,25 +35,41 @@ struct TEMPlocationOutline
     long long int totalAmountStolen;
 };
 
+void addToList(struct TEMPlocationOutline* tempStruct, struct locationOutline* mainStruct)
+{
+    printf("added to list\n");
+    strcpy(mainStruct->locationName, tempStruct->locationName);
 
+    mainStruct->placementList->ID = tempStruct->placementList->ID;
+    mainStruct->placementList->foodLevel = tempStruct->placementList->foodLevel;
+
+    printf("%lld\n", mainStruct->placementList->ID);
+}
+
+
+// function that takes in two structs and checks if the names/placements match any existing entries
 int compareEntry(struct TEMPlocationOutline* entry1, struct locationOutline* entry2)
 {
     /*debug*/printf("entry1[%s] entry2[%s]\n", entry1->locationName, entry2->locationName);
 
-    int isNew = 0;
+    int match = 0;
     if (strcmp(entry1->locationName, entry2->locationName) != 0 || entry1->placementList->ID != entry2->placementList->ID)
     {
-        isNew = 0; // 0 = new
+        match = 0; // 0 = new 
+        printf("new\n");
     } else
     {
-        isNew = 1; // 1 = not new
+        match = 1; // 1 = existing
+        printf("not new \n");
     }
-    return isNew;
+    return match;
 }
 
 
+// function that takes in a struct and checks how much food has been taken/added since last time it was entered
 int checkFood(struct locationOutline* curEntry)
 {
+    /*debug*/printf("checking food func\n");
     int curFoodLevel = curEntry->placementList->foodLevel;
     int prevFoodLevel = curEntry->placementList->prevFoodLevel;
     int maxFoodStolen = 0;
@@ -66,8 +82,11 @@ int checkFood(struct locationOutline* curEntry)
         maxFoodStolen = 0;
     }
 
+    curEntry->placementList->prevFoodLevel = curFoodLevel;
+
     return maxFoodStolen;
 }
+
 
 
 int main() 
@@ -75,7 +94,7 @@ int main()
     int i = 0; // for loop usage 
     long long int endToken = -1; // setting up endToken for do,while loop
     int numEntries = 1; // use in for loop, printing out results
-    int isNew = 1, checkFood = 0;
+    int matchFound = 0;
 
 
     struct locationOutline locations[30] = {0}; // instance of array of structs
@@ -86,66 +105,43 @@ int main()
     do
     {
         printf("start do while loop\n");
-
         // scan for req. info
-        scanf("%s %lld %lld", TEMPlocations[i].locationName, &TEMPlocations[i].placementList[i].ID, 
-        &TEMPlocations[i].placementList[i].foodLevel);
+        scanf("%s %lld %lld", TEMPlocations[i].locationName, &TEMPlocations[i].placementList->ID, 
+        &TEMPlocations[i].placementList->foodLevel);
 
-
-        // fix for before comparing through prev entries 
-        // maybe check all locations, make a flag to notify that match, then further check placement
-
-            for (int j = 0; j < numEntries; j++)
-            {   /*debug*/printf("tempNAME [%s] bankedNAME [%s]\n", TEMPlocations[i].locationName, locations[j].locationName);
-
-                if (strcmp(TEMPlocations[i].locationName, locations[j].locationName) != 0 
-                    || TEMPlocations[i].placementList[i].ID != locations[j].placementList[j].ID)
-                {
-                    checkFood = 0; isNew = 1;
-                } else
-                {
-                    /*debug*/printf("did not add to main struct\n");
-                    checkFood = 1; isNew = 0; break;
-                } 
-
-
-                    // new entry logic, if yes, assign temp values to main struct 
-                    if (isNew == 1)
-                    {
-                        strcpy(locations[i].locationName, TEMPlocations[i].locationName);
-                        locations[i].placementList[i].ID = TEMPlocations[i].placementList[i].ID;
-                        locations[i].placementList[i].foodLevel = TEMPlocations[i].placementList[i].foodLevel;
-                        numEntries++;
-                        printf("added to main struct\n");
-                        break;
-                    };
-            }
-
-
-        
-        
-        // check food logic
-        if (checkFood == 1) 
+        for (int j = 0; j < numEntries; j++)
         {
-            // check if new input food level is less than previous food level, if so, FOOD STOLEN!!! 
-            if (locations[i].placementList[i].foodLevel < locations[i].placementList[i].prevFoodLevel)  // if food stolen
-            {
-                locations[i].placementList[i].individualAmountStolen =
-                locations[i].placementList[i].foodLevel - locations[i].placementList[i].prevFoodLevel;
-            } else if (locations[i].placementList[i].foodLevel == locations[i].placementList[i].prevFoodLevel) // if no food stolen or added
-            {
-                locations[i].placementList[i].foodLevel = locations[i].placementList[i].prevFoodLevel;
-            } else // if added food
-            {
-                locations[i].placementList[i].prevFoodLevel = locations[i].placementList[i].foodLevel;
-            } 
+            int temp = compareEntry(&TEMPlocations[i], &locations[j]);
+            temp += matchFound;
         }
+        
+        if (matchFound < 1) // 1 = No matches found 
+        {
+            printf("match not Found\n");
+            addToList(&TEMPlocations[i], &locations[i]);
+            numEntries++;
+        }
+
+        if (matchFound >= 1)
+        {
+            printf("match found\n");
+            checkFood(&locations[i]);
+        }
+        
+        
+
+            
+
+
+        
+        
+    
         
 
         // increase index
         i++;
 
-    } while (locations[i - 1].placementList[i - 1].ID != endToken); // will be active until a "-1" is scanned into an ID slot
+    } while (locations[i - 1].placementList->ID != endToken); // will be active until a "-1" is scanned into an ID slot
     
 
 
@@ -161,9 +157,9 @@ int main()
 
 
     // print out the results 
-    for (int i = 0; i < numEntries - 2; i++) // subtract by 2 so we dont print out the "END -1 -1"
+    for (int k = 0; k < numEntries - 2; k++) // subtract by 2 so we dont print out the "END -1 -1"
     {
-        printf("%s %lld %lld\n", locations[i].locationName, locations[i].placementList[i].ID, locations[i].placementList[i].foodLevel);
+        printf("%s %lld %lld\n", locations[k].locationName, locations[k].placementList[k].ID, locations[k].placementList[k].foodLevel);
     }
 
     return 0;
