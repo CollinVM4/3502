@@ -75,29 +75,43 @@ void addLocation(LocationList *locationList)
     // Use scanf to input data
     scanf("%s %lld %lld", locationList->arr[locationList->size].name, &locationList->arr[locationList->size].placementList[0].ID,
             &locationList->arr[locationList->size].placementList[0].foodLevel);
+
+    locationList->size++;
 }
 
 void printLocation(Location *location)
 {
-    printf("Location Name: %s", location->name);
-    for (int i = 0; i < location->cap; ++i)
-    {
-        printf(" ID: %lld, Food Level: %lld\n", location->placementList[i].ID, location->placementList[i].foodLevel);
-    }
+    printf("Name: %s", location->name);
+    printf(" ID: %lld, Food Level: %lld\n", location->placementList[0].ID, location->placementList[0].foodLevel);
+    
 }
 
 
 
 int main()
 {
+
+
     LocationList *mainList = createLocationList();
 
+        while(1)
+        {
+            addLocation(mainList);
 
-  
-    addLocation(mainList);
 
-    printLocation(&mainList->arr[0]);
-    
+            if (mainList->arr[mainList->size - 1].placementList[0].ID == -1)
+            {
+                break;
+            }
+            
+        }
+
+        //  printing both locations
+        for (int i = 0; i < mainList->size; ++i)
+        {
+            printLocation(&mainList->arr[i]);
+        }
+
     
     
 
