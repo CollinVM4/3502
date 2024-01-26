@@ -87,39 +87,41 @@ void printLocation(Location *location)
 }
 
 
-
 int main()
 {
 
-
     LocationList *mainList = createLocationList();
 
-        while(1)
+        do
         {
-            addLocation(mainList);
-
-
+            // Check if a new location should be added
             if (mainList->arr[mainList->size - 1].placementList[0].ID == -1)
             {
                 break;
             }
-            
-        }
+
+            addLocation(mainList);
+
+            for (int i = 0; i < mainList->size - 1; i++)
+            {   // determine if new
+                if (strcmp(mainList->arr[mainList->size -1].name, mainList->arr[i].name) != 0 && 
+                        mainList->arr[mainList->size - 1].placementList[0].ID != mainList->arr[i].placementList[0].ID)
+                {
+                    printf("new placement\n");
+                } else
+                {
+
+                }
+            }
+
+        } while (1);
+        
 
         //  printing both locations
         for (int i = 0; i < mainList->size; ++i)
         {
             printLocation(&mainList->arr[i]);
         }
-
-    
-    
-
-
-
-
-
-
 
     return(0);
 }
