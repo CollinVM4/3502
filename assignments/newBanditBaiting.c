@@ -11,24 +11,20 @@ typedef struct Placement Placement;
 struct Placement
 {
     long long int ID;
-    long long int prevFoodLevel;
     long long int foodLevel;
-    long long int individualAmountStolen;
 };
 
 struct Location
 {
-    char **arr;
-    int size, cap;    
+    int size, cap;
     char *name;
-    int totalFoodTaken;    
     Placement *placementList;
 };
 
 struct LocationList 
 {
-    Location *arr;
     int size, cap;
+    Location *arr;
 };
 
 
@@ -51,79 +47,44 @@ LocationList *createLocationList()
 }
 
 
-void initializeLocation(Location *location, char *name)
+// function to initialize a location
+void initializeLocation(Location *location, char *name, long long int ID, long long int foodLevel)
 {
     location->size = 0;
-    location->cap = 0;
-    location->totalFoodTaken = 0;
-    
-    //allocate space for an an array of strings
-    location->arr = (char **)malloc(sizeof(char *) * location->cap);
-    location->name = strdup(name); // copy location name
+    location->cap = 10;
+
+    location->name = (char *)malloc(sizeof(char) * 100 + 1);
+    strncpy(location->name, name, 100);
 
     // dynamically allocate the array of Placement structs
-    location->placementList = (Placement *)malloc(sizeof(Placement));
-}
+    location->placementList = (Placement *)malloc(sizeof(Placement) * location->cap);
 
 
-// function to add to arrayList & expand if necessary
-void append(LocationList *list, char *name)
-{
-
-    // if list is full, expand
-    if (list->size == list->cap)
-    {
-        list->cap *= 2;
-        list->arr = (Location*)realloc(list->arr, sizeof(Location) * list ->cap);
-    }
-
-    // TO DO, ADD INFO TO STRUCT 
-}
-
-
-// function goes through the list and finds if name exists
-Location *findLocation(LocationList *list, char *name)
-{
-    // Linear search
-    for (int i = 0; i < list->size; i++)
-    {
-        //check if the name matches
-        if (strcmp(name, list->arr[i].name) == 0)
-        {
-            return &(list->arr[i]);
-        }
-    }
-    // TODO return
-}
-
-
-
-
-
-
-void printList(Location * list)
-{
-    for (int i = 0; i < list->size; i++)
-    {
-        printf("%s\n", list->arr[i]);
+     // Set default values for ID and foodLevel for each placement
+    for (int i = 0; i < location->cap; ++i) {
+        location->placementList[i].ID = ID;
+        location->placementList[i].foodLevel = foodLevel;
     }
 }
 
 
-void deleteList(Location *list)
-{
-    free(list->arr);
-    free(list);
-}
+// add a location to the list
+void addLocation(LocationList *locationList, char *name, long long int ID, long long int foodLevel) {
+    if (locationList->size >= locationList->cap) {
+        // Resize the array if necessary
+        locationList->cap *= 2;
+        locationList->arr = (Location *)realloc(locationList->arr, sizeof(Location) * locationList->cap);
+    }
 
+    initializeLocation(&locationList->arr[locationList->size++], name, ID, foodLevel);
+}
 
 
 int main()
 {
     LocationList *mainList = createLocationList();
 
-    char locationName[100 + 1];
-
+    addLocation(mainList, "Location1", 1, 100);
 
 
 
