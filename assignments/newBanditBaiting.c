@@ -48,43 +48,58 @@ LocationList *createLocationList()
 
 
 // function to initialize a location
-void initializeLocation(Location *location, char *name, long long int ID, long long int foodLevel)
+void initializeLocation(Location *location)
 {
     location->size = 0;
     location->cap = 10;
 
     location->name = (char *)malloc(sizeof(char) * 100 + 1);
-    strncpy(location->name, name, 100);
 
-    // dynamically allocate the array of Placement structs
     location->placementList = (Placement *)malloc(sizeof(Placement) * location->cap);
-
-
-     // Set default values for ID and foodLevel for each placement
-    for (int i = 0; i < location->cap; ++i) {
-        location->placementList[i].ID = ID;
-        location->placementList[i].foodLevel = foodLevel;
-    }
 }
 
 
 // add a location to the list
-void addLocation(LocationList *locationList, char *name, long long int ID, long long int foodLevel) {
-    if (locationList->size >= locationList->cap) {
-        // Resize the array if necessary
+void addLocation(LocationList *locationList) 
+{
+    if (locationList->size >= locationList->cap) 
+    {
+        // expand the array if it meets capacity
         locationList->cap *= 2;
         locationList->arr = (Location *)realloc(locationList->arr, sizeof(Location) * locationList->cap);
     }
 
-    initializeLocation(&locationList->arr[locationList->size++], name, ID, foodLevel);
+    // initialize the new location
+    initializeLocation(&locationList->arr[locationList->size]);
+
+    // Use scanf to input data
+    scanf("%s %lld %lld", locationList->arr[locationList->size].name, &locationList->arr[locationList->size].placementList[0].ID,
+            &locationList->arr[locationList->size].placementList[0].foodLevel);
 }
+
+void printLocation(Location *location)
+{
+    printf("Location Name: %s", location->name);
+    for (int i = 0; i < location->cap; ++i)
+    {
+        printf(" ID: %lld, Food Level: %lld\n", location->placementList[i].ID, location->placementList[i].foodLevel);
+    }
+}
+
 
 
 int main()
 {
     LocationList *mainList = createLocationList();
 
-    addLocation(mainList, "Location1", 1, 100);
+
+  
+    addLocation(mainList);
+
+    printLocation(&mainList->arr[0]);
+    
+    
+    
 
 
 
