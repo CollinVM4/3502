@@ -18,6 +18,7 @@ struct Location
 {
     int size, cap;
     char *name;
+    long long int totalStolen;
     Placement *placementList;
 };
 
@@ -52,6 +53,7 @@ void initializeLocation(Location *location)
 {
     location->size = 0;
     location->cap = 10;
+    location->totalStolen = 0;
 
     location->name = (char *)malloc(sizeof(char) * 100 + 1);
 
@@ -72,10 +74,58 @@ void addLocation(LocationList *locationList)
     // initialize the new location
     initializeLocation(&locationList->arr[locationList->size]);
 
+    // data to temporarily hold scanned in entries
+    char name[100 + 1];
+    long long int ID;
+    long long int foodLevel;
+
+
     // Use scanf to input data
-    scanf("%s %lld %lld", locationList->arr[locationList->size].name,
-            &locationList->arr[locationList->size].placementList[0].ID,
-            &locationList->arr[locationList->size].placementList[0].foodLevel);
+    scanf("%s %lld %lld", name, ID, foodLevel);
+
+    // linear search through locations
+    for (int i = 0; i < locationList->size; i++)
+    {
+        if (strcmp(name, locationList->arr[i].name) == 0) // equal
+        {
+            // linear search through specific location's placements
+            for (int j = 0; j < locationList->arr[i].size; j++) 
+            {
+                if (ID == locationList->arr[i].placementList[j].ID) // existing placement
+                {
+                    // if food added/same amount
+                    if (foodLevel >= locationList->arr[i].placementList[j].ID)
+                    {
+                        printf("0\n");
+                    }
+                    
+                    // if food was stolen
+                    if (foodLevel < locationList->arr[i].placementList[j].ID)
+                    {
+                        long long int leastAmountStolen = locationList->arr[i].placementList[j].ID - foodLevel; // subtract previous food level from current entry
+                        printf("%lld", leastAmountStolen);
+                        locationList->arr[i].totalStolen += leastAmountStolen; // update location totalStolen
+                    }
+                }
+            }
+            
+
+            
+        }
+        
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
 
     locationList->size++;
 }
