@@ -73,7 +73,8 @@ void addLocation(LocationList *locationList)
     initializeLocation(&locationList->arr[locationList->size]);
 
     // Use scanf to input data
-    scanf("%s %lld %lld", locationList->arr[locationList->size].name, &locationList->arr[locationList->size].placementList[0].ID,
+    scanf("%s %lld %lld", locationList->arr[locationList->size].name,
+            &locationList->arr[locationList->size].placementList[0].ID,
             &locationList->arr[locationList->size].placementList[0].foodLevel);
 
     locationList->size++;
@@ -102,18 +103,6 @@ int main()
 
             addLocation(mainList);
 
-            for (int i = 0; i < mainList->size - 1; i++)
-            {   // determine if new
-                if (strcmp(mainList->arr[mainList->size -1].name, mainList->arr[i].name) != 0 && 
-                        mainList->arr[mainList->size - 1].placementList[0].ID != mainList->arr[i].placementList[0].ID)
-                {
-                    printf("new placement\n");
-                } else
-                {
-
-                }
-            }
-
         } while (1);
         
 
@@ -125,3 +114,14 @@ int main()
 
     return(0);
 }
+
+
+
+
+/*
+    TODO for tomorrow
+    * work on indexing placements
+    * determine if new
+    * determine how much food since last entry
+    * collect amount taken from each placement 
+*/
