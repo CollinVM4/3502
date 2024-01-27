@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 
 typedef struct LocationList LocationList;
@@ -16,7 +17,7 @@ struct Placement
 
 struct Location
 {
-    int size, cap;
+    int size, cap, placementSize;
     char *name;
     long long int totalStolen;
     Placement *placementList;
@@ -54,12 +55,15 @@ void initializeLocation(Location *location)
     location->size = 0;
     location->cap = 10;
     location->totalStolen = 0;
+    location->placementSize = 0;
 
     location->name = (char *)malloc(sizeof(char) * 100 + 1);
 
     location->placementList = (Placement *)malloc(sizeof(Placement) * location->cap);
     location->placementList->foodLevel = 0;
     location->placementList->ID = 0;
+    
+    
 }
 
 
@@ -76,32 +80,32 @@ void addLocation(LocationList *locationList)
     // initialize the new location
     initializeLocation(&locationList->arr[locationList->size]);
 
-    // data to temporarily hold scanned in entries
+     // data to temporarily hold scanned in entries
     char name[100 + 1];
     long long int ID;
     long long int foodLevel;
 
-
     // Use scanf to input data
     scanf("%s %lld %lld", name, &ID, &foodLevel);
-
+    
     // linear search through locations
-    for (int i = 0; i < locationList->size + 1; i++)
+    for (int i = 0; i < locationList->size; i++)
     {
         if (strcmp(name, locationList->arr[i].name) == 0) // checks if two entires are equal
         {
             // if location exists, linear search through specific location's placements
-            for (int j = 0; j < locationList->arr[i].size + 1; j++) 
+            bool foundPlacement = false;
+            for (int j = 0; j < locationList->arr[i].placementSize; j++) 
             {
                 if (ID == locationList->arr[i].placementList[j].ID) // existing placement
                 {
+                    foundPlacement = true; 
                     // if food added/same amount
                     if (foodLevel >= locationList->arr[i].placementList[j].foodLevel)
                     {
                         printf("0\n"); 
                         break;
                     }
-                    
                     // if food was stolen
                     if (foodLevel < locationList->arr[i].placementList[j].foodLevel)
                     {
@@ -111,28 +115,44 @@ void addLocation(LocationList *locationList)
                         break;
                     }
                 } 
-                else // new placement
-                {
-                    locationList->size++;
-                    printf("SUB New placement.\n");
-                    locationList->arr[i].placementList[j].ID = ID;
-                    locationList->arr[i].placementList[j].foodLevel = foodLevel;
-                    break;
-                }
             }
+            // If we've gone through all placements and haven't found a match, it's a new placement
+            if (!foundPlacement) // if placement doesnt exist
+            {
+                printf("SUB New placement.\n");
+                locationList->arr[i].placementList[0].ID = ID;
+                locationList->arr[i].placementList[0].foodLevel = foodLevel;
+                locationList->arr[i].placementSize++; // increment the size of the placementList for the specific location
+            }
+            return; // We've found the location, no need to keep looking   
         } 
-        else // new location
-        {
-            locationList->size++; // increase size 
-            printf("TOTALY New placement.\n");
-
-            //assign data to the main list
-            strcpy(locationList->arr[i].name, name); 
-            locationList->arr[i].placementList[0].foodLevel = ID;
-            locationList->arr[i].placementList[0].foodLevel = foodLevel;
-            break;
-        }
     }
+
+    // If we've gone through all locations and haven't found a match, it's a new location
+    if (locationList->size >= locationList->cap) 
+    {
+        // expand the array if it meets capacity
+        locationList->cap *= 2;
+        locationList->arr = (Location *)realloc(locationList->arr, sizeof(Location) * locationList->cap);
+    }
+
+    // initialize the new location
+    initializeLocation(&locationList->arr[locationList->size]);
+
+    int initialSize = 10; // initial size of the array
+    locationList->arr[locationList->size].placementList = malloc(sizeof(Placement) * initialSize);
+
+    //assign data to the main list
+    strcpy(locationList->arr[locationList->size].name, name); 
+    locationList->arr[locationList->size].placementList[0].ID = ID;
+    locationList->arr[locationList->size].placementList[0].foodLevel = foodLevel;
+
+    locationList->arr[locationList->size].placementSize++; // increment the size of the placementList for the specific location
+    locationList->size++; // increase size 
+
+    printf("TOTALLY New placement.\n");
+        
+    
 }
 
 void printLocation(Location *location)
