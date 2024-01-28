@@ -5,10 +5,19 @@
 
 int main()
 {
-    char seq1[10000 + 1];
-    char seq2[10000 + 1];
-    scanf("%s%s", seq1, seq2);
 
+    FILE *file = fopen("input2.txt", "r");
+    if (file == NULL) {
+        printf("Could not open file\n");
+        return 1;
+    }
+    char seq1[100000 + 1];
+    char seq2[100000 + 1];
+
+    if (fscanf(file, "%s %s", seq1, seq2) != 2) {
+        printf("Could not read data from file\n");
+        return 1;
+    }
     int answer = 0;
 
     // brute force all possible starting points
@@ -37,5 +46,7 @@ int main()
     
     printf("%d\n", answer);
 
+
+    fclose(file);
     return 0;
 }
