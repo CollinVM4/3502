@@ -1,3 +1,10 @@
+/*
+    - Collin Van Meter
+    - COP3502C, Spring 2024
+    - Assignment 1, BanditBaiting [DMA]
+*/
+
+
 // libraries used
 #include <stdlib.h>
 #include <stdio.h>
@@ -27,6 +34,7 @@ struct LocationList
     int size, cap;
     Location *arr;
 };
+
 
 // function prototypes
 LocationList *createLocationList();
