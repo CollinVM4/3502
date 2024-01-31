@@ -43,17 +43,67 @@ Node * insertHead(Node * tail, int data)
     return tail;
 }
 
+
+Node * removeHead(Node * tail)
+{
+    if (!tail) return NULL;
+    if (tail->next == tail) 
+    {
+        free(tail);
+        return NULL;
+    }
+
+    Node * newHead = tail->next->next;
+    free(tail->next);
+    tail->next = newHead;
+
+    return tail;
+}
+
+
 Node * insertTail(Node * tail, int data)
 {
+    if (!tail) return NULL;
     return insertHead(tail, data)->next;
 }
 
+void printList(Node * tail)
+{
+    // empty list case
+    if(tail == NULL) printf("NULL\n"); return;
+
+    // print all the nodes starting at the head 
+    Node * cur = tail->next;
+    do
+    {
+        printf("%d -> ", cur->data);
+        cur = cur->next;
+    } while (cur != tail->next);
+    
+    printf("\n");
+}
 
 
 
 int main()
 {
 
+    Node * tail = NULL;
+
+    // head insert 
+    for (int i = 0; i < 10; i++)
+    {
+        tail = insertHead(tail, i);
+
+    }
+    //head remove
+    for (int i = 0; i < 11; i++)
+    {
+        printList(tail);
+        tail = removeHead(tail, i);
+    }
+    
+    
 
 
     return(0);
