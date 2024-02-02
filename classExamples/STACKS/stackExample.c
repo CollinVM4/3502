@@ -51,8 +51,137 @@
             push operand 2, operate with operand 1
             
         return top of stack
+
+
+
+    Queue Structure 
+        Front of queue has been there the longest
+        Remove from the front of the queue
+        Insertion to the tail
+
+
+
 */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h> // DO NOT USE!
 
+typedef struct Node Node;
+typedef struct Stack Stack;
+
+
+struct Node
+{
+    Node * next;
+    int data;
+};
+
+struct Stack
+{
+    int size;
+    Node * head;
+};
+
+Node * createNode(int value)
+{
+    Node * res = (Node *)malloc(sizeof(Node));
+    res->data = value;
+    res->next = NULL;
+    return res;
+};
+
+Node * insertHead(Node * head, int data)
+{
+    Node * newHead = createNode(data);
+    newHead->next = head;
+    return head;
+}
+
+Node * removeHead(Node * head)
+{
+    if (head)
+    {
+        Node * oldHead = head;
+        head = head->next;
+        free(oldHead);
+    }
+    return head;
+}
+
+// ^ basic LL functions
+// \/ stack operations
+
+void push(Stack * stk, int data)
+{
+    stk->head = insertHead(stk->head, data);
+    stk->size++;
+}
+
+void pop(Stack * stk)
+{   
+    assert(stk->size != 0);
+    stk->head = removeHead(stk->head);
+    stk->size--;
+}
+
+int top(Stack stk)
+{
+    assert(stk.size != 0);
+    return stk.head->data;
+}
+
+int isNumber(char * str)
+{
+    return ('0' <= str[0] && str[0] <= '9' || ('0' <= str[1] && str[1] <= '9'));
+}
+
+
+
+// evaluate a postfix expression to the resulting number
+int main()
+{
+    Stack operandStack; // stack contains numbers
+
+    // initialize
+    operandStack.size = 0;
+    operandStack.head = NULL;
+
+    char token[100 + 1];
+
+    // Loop through expression
+    while (EOF != scanf("%s", token))
+    {
+        if (isNumber(token))
+        {
+            // add to operand stack
+            push(&operandStack, atoi(token));
+        } 
+        else
+        {
+            int res = 0;
+            int a = top(operandStack);
+            pop(&operandStack);
+            int b = top(operandStack);
+            pop(&operandStack);
+
+            if (token[0] == '+') res = a + b;
+            else if (token[0] == '-') res = a - b;
+            else if (token[0] == '*') res = a * b;
+            else if (token[0] == '/') res = a / b;      
+            else assert(0);
+
+            push(&operandStack, res);                  
+            
+        }
+        
+    }
+    
+
+
+
+
+    return 0;
+}
 
 
