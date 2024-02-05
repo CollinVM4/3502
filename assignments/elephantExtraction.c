@@ -1,3 +1,4 @@
+
 /*
     - Collin Van Meter
     - COP 3502C 
@@ -77,41 +78,48 @@ void pop(Stack * stk)
 // get the top of the stack
 void top(Stack * stk, int * row_ptr, int * col_ptr)
 {
-    if (stk->head != NULL)
+    // if not empty
+    if (stk->head != NULL) 
     {
         *row_ptr = stk->head->row;
         *col_ptr = stk->head->column;
     }
 }
 
+// add bait to grid
 void addBait(int ** grid, int row, int col, int amt)
 {
     grid[row][col] += amt;
 }
 
+// eat bait from grid
 int eatBait(int ** grid, int row, int col)
 {
+    // make sure there is bait to eat
     if (grid[row][col] > 0)
     {
         grid[row][col]--;
         return 1;
     }
-    return 0;
+    return 0; // failed to eat bait
 }
 
+// move the elephant
 void move(Elephant * ele_ptr, int ** grid)
 {
     int row, col;
-    top(&ele_ptr->memory, &row, &col);
-    if (row > 0)
+    top(&ele_ptr->memory, &row, &col); // get the current location of the elephant
+
+    if (row > 0) // prevent seg fault if elephant is on the top edge of the grid
     {
+        // the if statement checks if eatbait was successful, if so, push the new location onto the stack
         if (eatBait(grid, row - 1, col))
         {
-            push(&ele_ptr->memory, row - 1, col);
+            push(&ele_ptr->memory, row - 1, col); 
             return;
         }
     }
-    if (row < 99)
+    if (row < 99) // prevent seg fault if elephant is on the bottom edge of the grid
     {
         if (eatBait(grid, row + 1, col))
         {
@@ -119,7 +127,14 @@ void move(Elephant * ele_ptr, int ** grid)
             return;
         }
     }
-    if (col > 0)
+    {
+        if (eatBait(grid, row + 1, col))
+        {
+            push(&ele_ptr->memory, row + 1, col);
+            return;
+        }
+    }
+    if (col > 0) // prevent seg fault if elephant is on the left edge of the grid
     {
         if (eatBait(grid, row, col - 1))
         {
@@ -127,7 +142,7 @@ void move(Elephant * ele_ptr, int ** grid)
             return;
         }
     }
-    if (col < 99)
+    if (col < 99) // prevent seg fault if elephant is on the right edge of the grid
     {
         if (eatBait(grid, row, col + 1))
         {
@@ -135,9 +150,11 @@ void move(Elephant * ele_ptr, int ** grid)
             return;
         }
     }
-    pop(&ele_ptr->memory);
+
+    pop(&ele_ptr->memory);  // if elephant unable to move, pop the top of the stack
 }
 
+// eat bait
 int eat(Elephant * ele_ptr, int ** grid)
 {
     int row, col;
@@ -149,6 +166,7 @@ int eat(Elephant * ele_ptr, int ** grid)
     return 0;
 }
 
+// progress the hour
 int progress_hour(Elephant * ele_arr, int num_ele, int ** grid)
 {
     int i, eaten = 0;
@@ -162,14 +180,69 @@ int progress_hour(Elephant * ele_arr, int num_ele, int ** grid)
             move(&ele_arr[i], grid);
         }
     }
-    return eaten;
+    return eaten; // return the num of watermelons eaten so we can print it
 }
+
+/*
+
+    assignment layout
+
+    input: 
+        1st line: number of elephants (1 <= N <= 10,000)
+        following "N" lines: row and column of each elephant (1-500)
+        afterwards: 3 commands 
+            1. "BAIT R C A" (row, column, amount to add to the grid)
+            2. "HOUR" (passing of 1 hour)
+            3. "QUIT" (end of commands)
+
+    output:
+        upon "HOUR" print num of watermelons consumed within the hour   
+        following "QUIT" print elephant location in order the were input 
+    
+    stack usage 
+        * individual stack for each elephant 
+            modify:
+                if elephant backtracks, pop prev. location from stack
+                if elephant travels tonew location, push onto the stack
+
+            do not modify:
+                if elephant is in initial location
+                if elephant eats at their location
+
+    grid usage
+        2D int array [x][y]
+        will hold the num of watermelons at each position
+    
+
+    plan:
+        1. create a 2D array of size 100x100 (double pointer method)
+        2. create an array of elephants (for loop to init)
+        3. read in the number of elephants (for loop)
+        4. read in the location of each elephant (for loop)
+        5. read in the commands (while loop)
+        6. execute the commands (switch statement)
+        7. print the output (for loop)
+
+    first TODO
+        - figure out how to scan in until QUIT is reached
+
+
+
+*/
+
 
 int main()
 {
 
+    int grid[100][100];
 
 
 
-    return 0;
+
+
+
+
+
+
+    return(0);
 }
