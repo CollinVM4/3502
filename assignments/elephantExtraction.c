@@ -4,29 +4,27 @@
     - COP 3502C 
     - Elephant Extraction 
 */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 
 
-typedef Node Node;
-typedef Stack Stack;
-typedef Elephant Elephant; 
-
-struct Node 
+typedef struct Node 
 {
     int row, column;
-    Node * next;
-};
+    struct Node * next;
+} Node;
 
-struct Stack 
+typedef struct Stack 
 {
     Node * head;
-};
+} Stack;
 
-struct Elephant 
+typedef struct Elephant 
 {
     Stack memory;
-};
+} Elephant;
 
 
 
@@ -224,7 +222,9 @@ int progress_hour(Elephant * ele_arr, int num_ele, int ** grid)
         7. print the output (for loop)
 
     first TODO
-        - figure out how to scan in until QUIT is reached
+        - figure out how to scan in until QUIT is reached  (DONE)
+        - implement the double pointer method for the grid...
+
 
 
 
@@ -233,15 +233,56 @@ int progress_hour(Elephant * ele_arr, int num_ele, int ** grid)
 
 int main()
 {
-
+    // create and init grid
     int grid[100][100];
+    for (int i = 0; i < 100; i++)
+    {
+        for (int j = 0; j < 100; j++)
+        {
+            grid[i][j] = 0;
+        }
+    }
 
+    // declare vars
+    int num_ele, i, j, row, col, amt;
+    Elephant * ele_arr;
 
+    // read in the number of elephants
+    scanf("%d", &num_ele);
 
+    // allocate memory for the elephant array
+    ele_arr = (Elephant *) malloc(num_ele * sizeof(Elephant));
 
-
-
-
+    // read in the location of each elephant
+    for (i = 0; i < num_ele; i++)
+    {
+        scanf("%d %d", &row, &col);
+        push(&ele_arr[i].memory, row, col);
+    }
+    
+    // read in the commands
+    char command[5];
+    while (scanf("%s", command) != EOF)
+    {
+        if (command[0] == 'B') // BAIT
+        {
+            // read bait's Row Column Amount
+            scanf("%d %d %d", &row, &col, &amt);
+            addBait(&grid, row, col, amt);
+        } else if (command[0] == 'H') // HOUR
+        {
+            printf("%d\n", progress_hour(ele_arr, num_ele, &grid));
+        } else if (command[0] == 'Q') // QUIT
+        {
+            // print each elephant's location (in order they were typed in)
+            for (i = 0; i < num_ele; i++)
+            {
+                top(&ele_arr[i].memory, &row, &col);
+                printf("%d %d\n", row, col);
+            }
+            break;
+        }
+    }
 
 
     return(0);
