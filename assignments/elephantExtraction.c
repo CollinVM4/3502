@@ -82,6 +82,12 @@ void top(Stack * stk, int * row_ptr, int * col_ptr)
         *row_ptr = stk->head->row;
         *col_ptr = stk->head->column;
     }
+    else
+    {
+        // handle the case where the stack is empty
+        *row_ptr = -1;
+        *col_ptr = -1;
+    }
 }
 
 // add bait to grid
@@ -117,14 +123,7 @@ void move(Elephant * ele_ptr, int ** grid)
             return;
         }
     }
-    if (row < 99) // prevent seg fault if elephant is on the bottom edge of the grid
-    {
-        if (eatBait(grid, row + 1, col))
-        {
-            push(&ele_ptr->memory, row + 1, col);
-            return;
-        }
-    }
+    if (row < 499) // prevent seg fault if elephant is on the bottom edge of the grid
     {
         if (eatBait(grid, row + 1, col))
         {
@@ -140,7 +139,7 @@ void move(Elephant * ele_ptr, int ** grid)
             return;
         }
     }
-    if (col < 99) // prevent seg fault if elephant is on the right edge of the grid
+    if (col < 499) // prevent seg fault if elephant is on the right edge of the grid
     {
         if (eatBait(grid, row, col + 1))
         {
@@ -221,9 +220,10 @@ int progress_hour(Elephant * ele_arr, int num_ele, int ** grid)
         6. execute the commands (switch statement)
         7. print the output (for loop)
 
-    first TODO
+    TODO
         - figure out how to scan in until QUIT is reached  (DONE)
-        - implement the double pointer method for the grid...
+        - implement the double pointer method for the grid... (DONE)
+        - fix stack for each indv. elephant
 
 
 
@@ -234,10 +234,11 @@ int progress_hour(Elephant * ele_arr, int num_ele, int ** grid)
 int main()
 {
     // create and init grid
-    int grid[100][100];
-    for (int i = 0; i < 100; i++)
+    int **grid = malloc(500 * sizeof(int *)); // "double pointer method" discussed in lab
+    for (int i = 0; i < 500; i++)
     {
-        for (int j = 0; j < 100; j++)
+        grid[i] = malloc(500 * sizeof(int));
+        for (int j = 0; j < 500; j++)
         {
             grid[i][j] = 0;
         }
@@ -245,19 +246,28 @@ int main()
 
     // declare vars
     int num_ele, i, j, row, col, amt;
-    Elephant * ele_arr;
 
+    
     // read in the number of elephants
     scanf("%d", &num_ele);
 
-    // allocate memory for the elephant array
+
+    // create array of elephants
+    Elephant * ele_arr;
     ele_arr = (Elephant *) malloc(num_ele * sizeof(Elephant));
+
+    // init each elephant's stack
+    for (int i = 0; i < num_ele; i++) 
+    {
+        ele_arr[i].memory.head = NULL; // Initialize the head of the stack to NULL
+    }
+
 
     // read in the location of each elephant
     for (i = 0; i < num_ele; i++)
     {
-        scanf("%d %d", &row, &col);
-        push(&ele_arr[i].memory, row, col);
+        scanf("%d %d", &row, &col); 
+        push(&ele_arr[i].memory, row - 1, col - 1);
     }
     
     // read in the commands
@@ -268,10 +278,10 @@ int main()
         {
             // read bait's Row Column Amount
             scanf("%d %d %d", &row, &col, &amt);
-            addBait(&grid, row, col, amt);
+            addBait(grid, row - 1, col - 1, amt);
         } else if (command[0] == 'H') // HOUR
         {
-            printf("%d\n", progress_hour(ele_arr, num_ele, &grid));
+            printf("%d\n", progress_hour(ele_arr, num_ele, grid));
         } else if (command[0] == 'Q') // QUIT
         {
             // print each elephant's location (in order they were typed in)
@@ -284,6 +294,12 @@ int main()
         }
     }
 
+
+    for (int i = 0; i < 500; i++)
+    {
+        free(grid[i]);
+    }
+    free(grid);
 
     return(0);
 }
