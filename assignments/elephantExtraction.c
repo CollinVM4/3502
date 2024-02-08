@@ -103,52 +103,59 @@ int eatBait(int ** grid, int row, int col)
     if (grid[row][col] > 0)
     {
         grid[row][col]--;
-        return 1;
+        return 1; // success 
     }
-    return 0; // failed to eat bait
+    return 0; // failed 
 }
 
-// move the elephant
 void move(Elephant * ele_ptr, int ** grid)
 {
     int row, col;
     top(&ele_ptr->memory, &row, &col); // get the current location of the elephant
 
-    if (row > 0) // prevent seg fault if elephant is on the top edge of the grid
+    // Check for bait in the cells adjacent to the elephant's current position
+    if ((row > 0 && grid[row - 1][col] > 0) ||
+        (row < 499 && grid[row + 1][col] > 0) ||
+        (col > 0 && grid[row][col - 1] > 0) ||
+        (col < 499 && grid[row][col + 1] > 0))
     {
-        // the if statement checks if eatbait was successful, if so, push the new location onto the stack
-        if (eatBait(grid, row - 1, col))
-        {
-            push(&ele_ptr->memory, row - 1, col); 
-            return;
-        }
-    }
-    if (row < 499) // prevent seg fault if elephant is on the bottom edge of the grid
-    {
-        if (eatBait(grid, row + 1, col))
-        {
-            push(&ele_ptr->memory, row + 1, col);
-            return;
-        }
-    }
-    if (col > 0) // prevent seg fault if elephant is on the left edge of the grid
-    {
-        if (eatBait(grid, row, col - 1))
-        {
-            push(&ele_ptr->memory, row, col - 1);
-            return;
-        }
-    }
-    if (col < 499) // prevent seg fault if elephant is on the right edge of the grid
-    {
-        if (eatBait(grid, row, col + 1))
-        {
-            push(&ele_ptr->memory, row, col + 1);
-            return;
-        }
-    }
+        int closestRow = -1;
+        int closestCol = -1;
+        int minDistance = 500 * 500; // max possible distance in a 500x500 grid
 
-    pop(&ele_ptr->memory);  // if elephant unable to move, pop the top of the stack
+        // Iterate over all cells in the grid
+        for (int i = 0; i < 500; i++)
+        {
+            for (int j = 0; j < 500; j++)
+            {
+                // If the cell contains bait and is closer than the current closest cell with bait
+                if (grid[i][j] > 0 && abs(i - row) + abs(j - col) < minDistance)
+                {
+                    closestRow = i;
+                    closestCol = j;
+                    minDistance = abs(i - row) + abs(j - col);
+                }
+            }
+        }
+
+        // If a closest cell with bait was found, move the elephant to that cell
+        if (closestRow != -1 && closestCol != -1)
+        {
+            push(&ele_ptr->memory, closestRow, closestCol);
+        }
+    }
+    else
+    {
+        // If no bait was found in the adjacent cells, pop the current location from the memory stack
+        pop(&ele_ptr->memory);
+
+        // Check if the stack is empty after popping
+        if (ele_ptr->memory.head == NULL)
+        {
+            // If the stack is empty, push the last position back onto the stack
+            push(&ele_ptr->memory, row, col);
+        }
+    }
 }
 
 // eat bait
@@ -288,7 +295,7 @@ int main()
             for (i = 0; i < num_ele; i++)
             {
                 top(&ele_arr[i].memory, &row, &col);
-                printf("%d %d\n", row, col);
+                printf("%d %d\n", row + 1, col + 1);
             }
             break;
         }
@@ -300,6 +307,6 @@ int main()
         free(grid[i]);
     }
     free(grid);
-
+    
     return(0);
 }
