@@ -150,13 +150,14 @@ void move(Elephant * ele_ptr, int ** grid)
         maxCol = col + 1;
     }
 
-    // If maxBait is still -1, no bait was found in the adjacent cells
+    // no bait in adjacent cells
     if (maxBait == -1)
     {
         // Only pop the current location from the memory stack if it's not the initial location
         if (ele_ptr->memory.head != NULL && ele_ptr->memory.head->next != NULL)
         {
             pop(&ele_ptr->memory);
+            push(&ele_ptr->memory, row, col);
         }
 
         // Get the new top of the stack
@@ -165,11 +166,15 @@ void move(Elephant * ele_ptr, int ** grid)
             top(&ele_ptr->memory, &row, &col);
         }
     }
+    // bait found in adjacent cells
     else
     {
         // Move to the cell with the most bait
         push(&ele_ptr->memory, maxRow, maxCol);
     }
+
+    // Update the elephant's position
+    top(&ele_ptr->memory, &row, &col);
 }
 
 // eat bait
