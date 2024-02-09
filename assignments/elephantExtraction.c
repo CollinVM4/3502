@@ -99,11 +99,17 @@ void addBait(int ** grid, int row, int col, int amt)
 // eat bait from grid
 int eatBait(int ** grid, int row, int col)
 {
+    int eaten = 0;
     // make sure there is bait to eat
     if (grid[row][col] > 0)
     {
-        grid[row][col]--;
-        return 1; // success 
+        while (grid[row][col] > 0)
+        {         
+            grid[row][col]--;
+            eaten += 1;
+        }
+        return eaten; // success 
+
     }
     return 0; // failed 
 }
@@ -113,48 +119,56 @@ void move(Elephant * ele_ptr, int ** grid)
     int row, col;
     top(&ele_ptr->memory, &row, &col); // get the current location of the elephant
 
-    // Check for bait in the cells adjacent to the elephant's current position
-    if ((row > 0 && grid[row - 1][col] > 0) ||
-        (row < 499 && grid[row + 1][col] > 0) ||
-        (col > 0 && grid[row][col - 1] > 0) ||
-        (col < 499 && grid[row][col + 1] > 0))
-    {
-        int closestRow = -1;
-        int closestCol = -1;
-        int minDistance = 500 * 500; // max possible distance in a 500x500 grid
+    // Initialize maxBait to -1 to find a cell with any amount of bait
+    int maxBait = -1;
+    int maxRow = row;
+    int maxCol = col;
 
-        // Iterate over all cells in the grid
-        for (int i = 0; i < 500; i++)
+    // Check for bait in the cells adjacent to the elephant's current position
+    if (row > 0 && grid[row - 1][col] > maxBait) // Up
+    {
+        maxBait = grid[row - 1][col];
+        maxRow = row - 1;
+        maxCol = col;
+    }
+    if (row < 499 && grid[row + 1][col] > maxBait) // Down
+    {
+        maxBait = grid[row + 1][col];
+        maxRow = row + 1;
+        maxCol = col;
+    }
+    if (col > 0 && grid[row][col - 1] > maxBait) // Left
+    {
+        maxBait = grid[row][col - 1];
+        maxRow = row;
+        maxCol = col - 1;
+    }
+    if (col < 499 && grid[row][col + 1] > maxBait) // Right
+    {
+        maxBait = grid[row][col + 1];
+        maxRow = row;
+        maxCol = col + 1;
+    }
+
+    // If maxBait is still -1, no bait was found in the adjacent cells
+    if (maxBait == -1)
+    {
+        // Only pop the current location from the memory stack if it's not the initial location
+        if (ele_ptr->memory.head != NULL && ele_ptr->memory.head->next != NULL)
         {
-            for (int j = 0; j < 500; j++)
-            {
-                // If the cell contains bait and is closer than the current closest cell with bait
-                if (grid[i][j] > 0 && abs(i - row) + abs(j - col) < minDistance)
-                {
-                    closestRow = i;
-                    closestCol = j;
-                    minDistance = abs(i - row) + abs(j - col);
-                }
-            }
+            pop(&ele_ptr->memory);
         }
 
-        // If a closest cell with bait was found, move the elephant to that cell
-        if (closestRow != -1 && closestCol != -1)
+        // Get the new top of the stack
+        if (ele_ptr->memory.head != NULL)        
         {
-            push(&ele_ptr->memory, closestRow, closestCol);
+            top(&ele_ptr->memory, &row, &col);
         }
     }
     else
     {
-        // If no bait was found in the adjacent cells, pop the current location from the memory stack
-        pop(&ele_ptr->memory);
-
-        // Check if the stack is empty after popping
-        if (ele_ptr->memory.head == NULL)
-        {
-            // If the stack is empty, push the last position back onto the stack
-            push(&ele_ptr->memory, row, col);
-        }
+        // Move to the cell with the most bait
+        push(&ele_ptr->memory, maxRow, maxCol);
     }
 }
 
@@ -163,28 +177,25 @@ int eat(Elephant * ele_ptr, int ** grid)
 {
     int row, col;
     top(&ele_ptr->memory, &row, &col);
-    if (eatBait(grid, row, col))
-    {
-        return 1;
-    }
-    return 0;
+    return (eatBait(grid, row, col));
 }
 
 // progress the hour
 int progress_hour(Elephant * ele_arr, int num_ele, int ** grid)
 {
-    int i, eaten = 0;
+    int i, totalEaten = 0;
     for (i = 0; i < num_ele; i++)
     {
-        if (eat(&ele_arr[i], grid))
-        {
-            eaten++;
-        } else 
+        int eaten = eat(&ele_arr[i], grid);
+        totalEaten += eaten;
+
+        if (eaten == 0) // If no watermelons were eaten, move the elephant
         {
             move(&ele_arr[i], grid);
         }
     }
-    return eaten; // return the num of watermelons eaten so we can print it
+    
+    return totalEaten; // return the total number of watermelons eaten
 }
 
 /*
@@ -226,11 +237,6 @@ int progress_hour(Elephant * ele_arr, int num_ele, int ** grid)
         5. read in the commands (while loop)
         6. execute the commands (switch statement)
         7. print the output (for loop)
-
-    TODO
-        - figure out how to scan in until QUIT is reached  (DONE)
-        - implement the double pointer method for the grid... (DONE)
-        - fix stack for each indv. elephant
 
 
 
@@ -307,6 +313,46 @@ int main()
         free(grid[i]);
     }
     free(grid);
-    
+
     return(0);
 }
+
+
+/*
+
+expected output
+2
+1 2
+2 4
+BAIT 2 2 2
+BAIT 2 2 3
+BAIT 2 4 2
+BAIT 2 1 2
+HOUR
+4
+HOUR
+3
+QUIT
+2 3
+2 3
+
+
+my output
+2
+1 2
+2 4
+BAIT 2 2 2
+BAIT 2 3 3 
+BAIT 2 4 2
+BAIT 2 1 2
+HOUR
+2
+HOUR
+2
+QUIT
+2 2
+2 3
+
+
+
+*/
