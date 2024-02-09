@@ -1,0 +1,18 @@
+algorith analysis notes
+x-x-x-x-x-x-x-x-x-x-x-x
+
+    *  used to compare programs that solve the same problem
+        - measure
+            1. runtime (not wallclock time, instead num of simple operations)
+                ie. arithmetic (+,-,/,*,%)
+                    binary 
+                    equality (!=, ==, <, >, <=, >=)
+                    increments (++, --, +=, -=)
+                    assignment (a = b)
+                    if (branches)
+                    dereference (*, ->)
+
+                        note: seeing how the program will grow is called Order Approximation (double input size, double simple operations)
+
+
+            2. memory
