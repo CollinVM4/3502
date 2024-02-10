@@ -154,13 +154,11 @@ void move(Elephant * ele_ptr, int ** grid)
         if (ele_ptr->memory.head != NULL)        
         {
             top(&ele_ptr->memory, &row, &col);
-            printf("no bait, BACKTRACKING to [%d, %d]\n", row + 1, col + 1);
         }
     }
     // bait found in adjacent cells
     else
     {
-        printf("found bait, moving to [%d, %d]\n", maxRow + 1, maxCol + 1);
         push(&ele_ptr->memory, maxRow, maxCol); // move to the cell with the most bait
     }
 }
