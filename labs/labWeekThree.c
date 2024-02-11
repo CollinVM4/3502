@@ -20,37 +20,33 @@ Node * createNode(int value)
     return newNode;
 };
 
-// my solution maybe?
-removeAll(int value, struct Node * head)
+void removeAll(int value, Node** head)
 {
-    Node * cur = head;
+    Node* cur = *head;
+    Node* prev = NULL;
 
-        while (cur->data != value)
-        {
+    while (cur != NULL)
+    {
         if (cur->data == value)
         {
-            Node * tmp = cur;
+            Node* tmp = cur;
+            if (prev == NULL)  // The head is the value to be removed
+            {
+                *head = cur->next;
+            }
+            else
+            {
+                prev->next = cur->next;
+            }
+            cur = cur->next;
             free(tmp);
-            cur = cur->next;
-            break;
-        } else 
+        }
+        else
         {
+            prev = cur;
             cur = cur->next;
         }
-        }
-
-
-
-
-
-
+    }
 }
 
-int main()
-{
 
-
-
-
-    return 0;
-}

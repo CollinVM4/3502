@@ -64,7 +64,7 @@ void pop(Stack * stk)
         Node * oldHead = stk->head;
         stk->head = stk->head->next;
         free(oldHead);
-    } else return;
+    } else return; // empty stack
 }
 
 // get the top of the stack
@@ -176,7 +176,7 @@ int progress_hour(Elephant * ele_arr, int num_ele, int ** grid)
 {
     int i, totalEaten = 0;
 
-    // first loop: move elephants
+    // first loop - move elephants
     for (i = 0; i < num_ele; i++)
     {
         int row, col;
@@ -187,7 +187,7 @@ int progress_hour(Elephant * ele_arr, int num_ele, int ** grid)
         }
     }
 
-    // second loop: elephants eat
+    // second loop - elephants eat
     for (i = 0; i < num_ele; i++)
     {
         totalEaten += eat(&ele_arr[i], grid);
@@ -236,17 +236,20 @@ int main()
     
     // read in the commands
     char command[5]; // will hold BAIT, HOUR, or QUIT
-    while (scanf("%s", command) != EOF) 
+    while (1) 
     {
+        scanf("%s", command);
         if (command[0] == 'B') // BAIT command 
         {
             // read bait's row, column, amount
             scanf("%d %d %d", &row, &col, &amt);
             addBait(grid, row - 1, col - 1, amt);
-        } else if (command[0] == 'H') // HOUR command
+        } 
+        else if (command[0] == 'H') // HOUR command
         {
             printf("%d\n", progress_hour(ele_arr, num_ele, grid));
-        } else if (command[0] == 'Q') // QUIT command
+        } 
+        else if (command[0] == 'Q') // QUIT command
         {
             // print each elephant's location (in order they were typed in)
             for (i = 0; i < num_ele; i++)
@@ -266,9 +269,13 @@ int main()
     free(grid); // free the grid
 
     // free each elepahnt's stack
-    for (i = 0; i < num_ele; i++) {
+    for (i = 0; i < num_ele; i++) 
+    {
         Node *current = ele_arr[i].memory.head;
-        while (current != NULL) {
+
+        // free each node in the stack
+        while (current != NULL) 
+        {
             Node *next = current->next;
             free(current);
             current = next;
