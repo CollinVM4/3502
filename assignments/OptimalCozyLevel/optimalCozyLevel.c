@@ -47,7 +47,17 @@
 int main()
 {
 
+    int numCats, p1, p2, p3 = 0;
 
+    // read in the num of cats 
+    scanf("%d", &numCats);
+
+    // based on num of cats, read in 3 cozy levels for each 
+    for (int i = 0; i < numCats; i++)
+    {
+        scanf("%d %d %d", &p1, &p2, &p3);
+    }
+    
 
 
     return 0;
