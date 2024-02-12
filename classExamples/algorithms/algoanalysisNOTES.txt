@@ -14,5 +14,74 @@ x-x-x-x-x-x-x-x-x-x-x-x
 
                         note: seeing how the program will grow is called Order Approximation (double input size, double simple operations)
 
-
             2. memory
+
+
+
+    approximate # of operations
+        classes of functions
+            1. drop constant factprs
+            2. drop non dominant term
+                    ex. 5n + 30
+                        ^ grows in respect to n O(n)
+
+            more order approximations
+                Big - Oh (omicron) ... n is in O(n^2) n^2 is an upperbound of n 
+                Big - Omega ... lower-bound
+                Big - Theta ... upper and lower bound <- BEST
+
+            Ideal to have slower growing functions in terms of runtime
+                ex. Little-Oh (faster than your program)
+
+            Order the functions from fastest growth to slowest growith 
+            5n^5    3nlog(n)    log(n^10)   n^n     1000000     3^n * 4^n
+
+            1. n^n
+            2. 3^n * 4^n
+            3. 3nlog(n)
+            4. 5n^5
+            5. log(n^10) (LOGS ARE INVERVSE OF EXPONENTIAL(FAST) SO THEY ARE EXPONENTIALY SLOW)
+            6. 1000000
+
+            exponential will grow faster than polynomial,   polynomial will always be faster than log
+
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                ans += i * j;
+            }
+        }
+
+        θ(n^2) because loop inside of loop
+        
+        for (int i = 0; i * i  < n; i++)
+        {
+            ans += i
+        }
+
+        θ(√n)
+
+
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                ans += i * j;
+            }
+        }
+
+        n(n-1)/2
+
+
+    
+Summations
+    summation properties
+        1. Constant factors can be pulled out (IF c depends on i, DO NOT DO THIS!!!!!!!!!!!!!!!!!! bc it's not a constant factor)
+        2. Addition of functions, you can split 
+        3. Bound changing
+
+    closed forms
+        - an expression that doesn't have summations or reccurance relations
