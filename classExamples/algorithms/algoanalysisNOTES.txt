@@ -45,6 +45,8 @@ x-x-x-x-x-x-x-x-x-x-x-x
 
             exponential will grow faster than polynomial,   polynomial will always be faster than log
 
+            Note: when using logs, avoid using bases ex. log(base3)4
+
 
         for (int i = 0; i < n; i++)
         {
@@ -76,12 +78,216 @@ x-x-x-x-x-x-x-x-x-x-x-x
         n(n-1)/2
 
 
-    
-Summations
+
+
+
+https://www.youtube.com/watch?v=XJkIaw2e1Pw  - orgo chem tutor summations
+https://www.youtube.com/watch?v=WrsZX7ue2n0  - cs example video
+
+Summations Σ
+
+
     summation properties
         1. Constant factors can be pulled out (IF c depends on i, DO NOT DO THIS!!!!!!!!!!!!!!!!!! bc it's not a constant factor)
         2. Addition of functions, you can split 
         3. Bound changing
 
+    b  <- inclusive upper bound
+    Σ  f(i)   --> F(a) + f(a+1) + f(a+2) .... + f(b)
+    i=a <- inclusive lower bound
+
+    ex. 
+
+    6
+    Σ (i^2 - 7)    --> (2^2 - 7) + (3^2 - 6) + (4^2 - 7) +  (5^2 - 7) + (6^2 - 7)
+    i = 2
+
+
+
+    Once summation is solved you get... 
     closed forms
         - an expression that doesn't have summations or reccurance relations
+    
+
+    ex. find the closed form of the summation
+        hint: add in missing values
+
+    n^2                  ^2         N-1           n-1
+    Σ i     ---->       Σ i   +     Σ i     -     Σ i       ->  n^2(n^2 + 1)/2  -  (n-1)(n-1+1)/2  -> runtime is n^4
+    i = n               i=n         i=1           i=1
+
+
+
+             
+    code example:
+
+    for(int i = 0; i * i < N; i++)
+    {
+        for(int j = 0; j < i; j++)
+        {
+            ans += j;
+        }
+    }
+
+        (also split)...
+        2nd         1st
+        √N - 1       i - 1                                                    i-1    0
+        Σ            Σ 1    <-- turns into i, split into two summations ex.   Σ 1    Σ 1
+        i=0          j=0                                                      j=1    j=0
+
+
+note: summations dont work when it comes to recursion 
+
+
+Reccurance Relations 
+    - self defined function
+
+    use back substitution
+
+
+
+
+
+Binary Search on a Sorted Array
+
+1. look at the middle term, check if value, if not equal, divide the array in half, 
+    ex. 
+    binarySearch(n, value, arr)
+    {
+        mid = n/2
+
+        if(value == arr[mid]) stop there
+
+        if(value < arr[mid])
+            binarySearch(mid, value, array "first half)
+
+        else
+            binarySearch(n-(mid + 1), value, array "last half")
+    }
+
+    We use recurrance relation to explain this behavior
+        a math function that is defined using itself 
+
+        T(N) = 1 * T(N/w) + 1   <--- recursive case 
+        T(1) = 1                <--- base case 
+
+        Use back substitution to remove all recursive calls 
+
+            1. repeated substitue for small inputs to recursive call 
+                T(N) = 1 * T(N/2) + 1               T(N/2) = 1 * T(N/4) + 1     
+                T(N) = 1 * ( 1 * T(N/4) + 1) + 1
+                T(N/4) = 1 * T(N/8) + 1
+                = 1 * T(N/8) = 1 + 1 + 1
+                AND SO ON....
+
+                CAN BE DESCRIBED AS 
+                K -----> T(N) = T(N/2^K) + K
+
+            BASICALLY NOTICE A PATERN OF EXPRESSIONS AND CREATE A GENERAL FORM 
+
+            NOW... WE WANT TO REMOVE THE RECURSIVE PART WHICH IS WHEN T = 1
+            WE WANT... T(N/2^K) = T(1)
+            WHAT DOES K NEED TO BE TO MAKE THE BASE CASE HAPPEN
+
+                            log(N)
+            T(N) = T(1) +  Σ 1
+                            i=1
+     
+
+
+        Another recurrance relation
+        ex. 
+
+            int foo(int n, int * arr, )
+            {
+                if(N<=1) return 0;
+
+                int res = fun(N/2, arr);  // two recursive calls :o
+
+                res += foo(N/2, arr + N/2); // 2nd one here
+
+                for(int i = 0; i < N; i++) // N operations here 
+                {
+                    res+= arr[i];
+                }
+
+                return res;
+            }
+
+            reccurance relation : 
+            T(N) = T(N/2) + T(N/2) + N 
+            = 2T(N/2) + N 
+
+
+
+            T(N) = 2T(N/2) + N 
+                T(N/2) = 2T(N/4) + N/2
+
+            T(N) = 2(2T(N/4) + N/2) + N 
+                = 4T(N/4) + N + N 
+                    T(N/4) = 2T(N/8) + N/4
+            
+            T(N) = 4(2T(N/8) + N/4) + N + N 
+                = 8T(N/8) + N + N + N 
+            
+            T(N/8) = 2T(N/16) + N/8
+                T(N) = 8(2T(N/16) + N/8) + N + N + N 
+            = 16T(N/16) + N + N + N + N 
+
+            general form: 
+            K --> T(N) = 2^K T(N/2^K) + K
+
+            what case causes recursion to cease?
+
+            T(1) = 1
+
+            how do we get there 
+
+            N/2^k = 1
+
+            N = 2^k
+                                    k
+            Log(b2)(N) = N * T(1) + Σ 1
+                                    i=1
+
+                theta(N * log (N))
+
+
+
+
+
+
+            Towers of Hanoi: runtime 
+
+            T(N) = 2T(N-1) + 1
+            T(0) = 1
+            T(N) = 2T(N-1) + 1
+                T(N-1) = 2T(N-1-1) + 1
+            T(N) = 2(2T(N-2) +1) +1
+                    = 4T(N-2) + 2 + 1
+                        T(N-2) = 2T(N-3) +1
+                        T(N) = 4(2T(N-3) + 1) + 2 + 1
+                        = 8T(N-3) + 4 + 2 + 1
+
+            GENERAL FORM            K-1
+                T(N) = 2^K T(N-K) + Σ 2^I       <-SUMMATION CAN BE EXPRESSED  + 2^K - 1
+                                    I=O
+
+            Find the base case (end of recursion)
+
+            T(N-K) = T(0)
+
+            T(N) = 2^n * T(0) + 2^N - 1
+                = 2^N * 1 + 2^N -1 
+                    = 2^N+1 -1 
+
+
+            Best, Average, Worst
+
+            for the linear Search
+
+            best -> theta(1) target is the first index
+
+            avg theta(N)
+
+            worst theta(N)

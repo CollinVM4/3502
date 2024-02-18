@@ -9,25 +9,11 @@
 
     note: MUST USE RECURSION
 
-    hint: use recursion class examples for help 
+    hint: use combination.c class example for help 
 
     important advice: 
     no structs, only recursive function and main, use global memory to hold arrays and answers, 
-    account for negative answers, base case: make sure each hose has a cat assigned
-
-
-    input:
-        1st line: num of cats
-        
-        N lines: each cat receives 3 cozy level ints (?) 
-
-        N lines: more input corresponding to the cozy levels of cats with families (?)
-    
-    output:
-        2 ints on the same line, 
-            1. max coziness sum possible
-            2. coziness of least cozy cat under least possible cozy combo
-
+    account for negative answers, base case: make sure each house has a cat assigned
 
 
 
@@ -35,12 +21,12 @@
 
         4           <- num of cats 
 
-        1 2 3       <- ? 
+        1 2 3       <- cozy level for particular cat at each family
         4 5 6
         7 8 9
         1 2 3
 
-        0 3 -3 2    <- ?
+        0 3 -3 2    <- the amount each cat will change when with other cats
         10 0 -6 4
         5 2 0 8
         0 0 0 0
@@ -56,10 +42,33 @@
 
 
 // function prototype
+int cozyCombo(foo);
+
+
+// function definition 
+int cozyCombo(foo)
+{
+
+    // base case: make sure each family has a cat assigned 
+    if (NULL)
+    {
+       
+    
+
+
+        return 0; // failed
+    }
+    int cozy = foo;
 
 
 
 
+    // recursive call
+    cozyCombo(cozy);
+
+
+    return cozy;
+}
 
 
 
