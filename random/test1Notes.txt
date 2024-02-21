@@ -16,4 +16,4 @@ x----------------x
         * analysis (reccurance relations, summations, best worst avg.)
 
     practice advice
-        * 
+        *
