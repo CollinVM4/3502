@@ -1,0 +1,19 @@
+test 1 notes
+x----------------x
+    * this friday 2/23
+    * no calculator
+    * handwritten formula sheet, front and back 
+    * NO TYPED NOTE SHEET!!! (-20pts)
+    * bring ucfID and pencil 
+    * 6 questions, 3 "easy", 3 hard <- answer 2 of 3
+
+    topics
+        * strings 
+        * DMA 
+        * LL
+        * stacks & queues
+        * recursion
+        * analysis (reccurance relations, summations, best worst avg.)
+
+    practice advice
+        * 

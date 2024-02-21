@@ -1,0 +1,108 @@
+Best, Average, Worst case 
+
+Big Oh - upperbound of the runtime 
+Big omega - lowerbound of the runtime 
+
+
+
+Linear Search 
+    best - θ(1)
+    avg - θ(n)
+    worst - θ(n)
+
+
+
+while (N) // while n is not zero
+{
+    N = rand() % N;
+} // can only escape if mod comes clean 0, so multiples of N or 1
+
+best θ(1)
+avg  θ(log(N))
+worst θ(N)
+
+
+Harmonic Series 
+===============
+basically sums up 1/1 + 1/2 + 1/3 + 1/4 + 1/5... etc. 
+
+ N
+ ∑ 1/n-i
+ i=0
+
+runtime is O(log(N))
+
+
+
+while (1) 
+{
+    for(int i = 0; i < N; i++ )
+    {
+        ans+= 1;
+    }
+    if (rand() % 2) break;
+}   
+
+best - θ(N)
+avg - θ(N)
+worst - "does not halt"
+
+practical algo analysis FE QUESTION !!
+    estimating runtimes
+
+    linear growth, input size doubles, so runtime will also double 
+
+    constant growth 
+        n= 10^6    time = 3s
+        n= 10^7    time = 3s
+
+
+    
+    ex. 
+
+    sorting algo with θ(N^2)
+        N = 10^4    t = 7s          
+        T = R * op 
+        T = R * N^2
+        7s = r * (10^4)^2
+        7s/10^8 = R
+
+
+        T = R(3* 10^4)^2
+        7s/10^8 * (3 * 10^4)^2
+
+        =63s
+
+
+
+
+
+        ex. 
+        Binary Search takes about .0001 seconds to find a val in a array of 1 million, 
+        about how long will it take to find a val in an array of 1 billion.
+
+        θ(log) on Average
+        T = R * log(N)
+        .0001 = R * log(1 million)
+        = .0001/log(10^6) = R 
+
+
+        now find for 1 billion
+
+        T = R * log(10^9)
+        = .0001s/10(log^6) * log(10^9)
+        cancel logs out
+        .0001s * 3/2
+        = .00015s
+
+
+
+    Amortization - 
+        over the course of a programs execution time, the worst 
+        is bounded by a smaller function, then worstcase for an
+        individual modification
+
+        ex. ArrayList
+            append
+                best θ(1)    avg θ(1)    worst θ(N)
+
