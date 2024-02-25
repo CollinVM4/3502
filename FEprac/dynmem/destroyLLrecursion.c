@@ -12,11 +12,9 @@ void destroy_list(node *head)
 {
     if(head == NULL) return;
 
+    node * nextNode = head->next;
+    free(head);
 
-        node * nextNode = head->next;
-        free(head);
-
-        
     destroy_list(nextNode);
 }
 

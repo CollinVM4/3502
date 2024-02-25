@@ -2,10 +2,18 @@
 | Assignment: pa01 - Encrypting a plaintext file using the Hill cipher
 |
 | Author: Collin Van Meter
-| Language: c
+| Language: c, c++, Java, go, python
 |
-| To Compile: gcc -o pa01 pa01.c
-| To Execute: c -> ./pa01 kX.txt pX.txt
+| To Compile: javac pa01.java
+| gcc -o pa01 pa01.c
+| g++ -o pa01 pa01.cpp
+| go build pa01.go
+|
+| To Execute: java -> java pa01 kX.txt pX.txt
+| or c++ -> ./pa01 kX.txt pX.txt
+| or c -> ./pa01 kX.txt pX.txt
+| or go -> ./pa01 kX.txt pX.txt
+| or python -> python3 pa01.py kX.txt pX.txt
 | where kX.txt is the keytext file
 | and pX.txt is plaintext file
 | Note:
@@ -14,7 +22,7 @@
 |
 | Class: CIS3360 - Security in Computing - Fall 2023
 | Instructor: McAlpin
-| Due Date: 2/25/2024
+| Due Date: per assignment
 +===========================================================================*/
 
 #include <stdlib.h>
@@ -22,7 +30,7 @@
 #include <ctype.h>
 
 
-#define MAX_TEXT_SIZE 10000
+#define MAX_TEXT_SIZE 100000
 
 
 // encrypt using hill cipher
@@ -74,7 +82,8 @@ int main(int argc, char **argv)
     keyFile = fopen(argv[1], "r");
     textFile = fopen(argv[2], "r");
 
-    fscanf(keyFile, "%d", &size); // read in size of the key
+    // read in size of the key
+    fscanf(keyFile, "%d", &size);
 
     // allocate memory for the key matrix
     key = malloc(size * sizeof(int *));
@@ -104,6 +113,7 @@ int main(int argc, char **argv)
             plainText[i++] = tolower(curChar);
         }
     }
+
     // pad the plaintext with 'x' until its length is a multiple of the size of the key matrix
     while(i % size != 0) 
     {
@@ -112,9 +122,9 @@ int main(int argc, char **argv)
     plainText[i] = '\0'; // add null terminator to the end of plaintext
 
 
+
     // call encryption on the plaintext
     hillCipher(size, key, plainText, cipher);
-
 
     // print resulting key, origianl plain text, and cipher text
     printf("\nKey matrix:\n");
@@ -150,7 +160,7 @@ int main(int argc, char **argv)
     }
     printf("\n");
 
-    // close files
+    // close  files
     fclose(keyFile);
     fclose(textFile);
 

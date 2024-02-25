@@ -16,7 +16,7 @@ typedef struct queue
 
 int dequeue(queue *thisQ) 
 {
-    if (thisQ == NULL) return 0;
+    if(thisQ == NULL) return 0;
 
     if(thisQ->size == 0) return 0;
         
@@ -32,7 +32,7 @@ int dequeue(queue *thisQ)
     else
         thisQ->tail = NULL;
 
-    free(temp); // Grading – 2pts
+    free(temp); 
 
     thisQ->size--; // Grading – 1 pt
 
