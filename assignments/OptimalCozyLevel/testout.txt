@@ -1,2 +1,2 @@
-Max Cozy Sum [30]
-Least Cozy Cat [2]
+Max Cozy Sum [50]
+Least Cozy Cat [0]
