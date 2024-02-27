@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define NUM_FRUITS 7
+
+int count;
+int toBuy;
+
+void comb(char ** fruits, int * current, int curFruit, int buyIndex);
+
+void comb(char ** fruits, int * cart, int curFruit, int buyIndex)
+{
+    int i;
+
+    if (buyIndex >= toBuy && 
+    ((buyIndex == 0 && curFruit == 0) || 
+    (buyIndex != 0 && cart[buyIndex - 1] == curFruit - 1)))
+    {
+        printf("%d. ", ++count);
+
+        for(i = 0; i < buyIndex; i++)
+        {
+            printf("%s ", fruits[cart[i]]);
+        }
+        printf("\n");
+    }
+
+    if(curFruit == NUM_FRUITS)
+    {
+        return;
+    }
+
+
+    cart[buyIndex] = curFruit;
+
+    comb(fruits, cart, curFruit + 1, buyIndex + 1);
+
+    cart[buyIndex] = -1;
+
+    comb(fruits, cart, curFruit + 1, buyIndex);
+
+    return;
+}
+
+
+
+int main()
+{
+    printf("test\n");
+    int * cur;
+    char ** frNames;
+    int i;
+
+    count = 0;
+
+    frNames = (char **) calloc(NUM_FRUITS, sizeof(char *));
+    frNames[0] = (char *) calloc(strlen("apple") + 1, sizeof(char));
+    strcpy(frNames[0], "apple");
+    frNames[1] = (char *) calloc(strlen("banana") + 1, sizeof(char));
+    strcpy(frNames[1], "banana");
+    frNames[2] = (char *) calloc(strlen("cherry") + 1, sizeof(char));
+    strcpy(frNames[2], "cherry");
+    frNames[3] = (char *) calloc(strlen("date") + 1, sizeof(char));
+    strcpy(frNames[3], "date");
+    frNames[4] = (char *) calloc(strlen("elderberry") + 1, sizeof(char));
+    strcpy(frNames[4], "elderberry");
+    frNames[5] = (char *) calloc(strlen("fig") + 1, sizeof(char));
+    strcpy(frNames[5], "fig");
+    frNames[6] = (char *) calloc(strlen("grape") + 1, sizeof(char));
+    strcpy(frNames[6], "grape");
+    
+
+    scanf("%d", &toBuy);
+
+    cur = (int *) calloc(NUM_FRUITS, sizeof(int));
+
+    // fill the arrays
+    for(i = 0; i < NUM_FRUITS; i++)
+    {
+        cur[i] = -1;
+    }
+
+    comb(frNames, cur, 0, 0);
+
+    return EXIT_SUCCESS;
+}
