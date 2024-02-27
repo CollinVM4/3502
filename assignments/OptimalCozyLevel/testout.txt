@@ -1,1 +1,2 @@
-Max Cozy Sum [36]
+Max Cozy Sum [30]
+Least Cozy Cat [2]

@@ -11,12 +11,15 @@
 // constants
 #define MAX_CATS 15
 #define MAX_FAMS 3
+#define INF 1e9
 
 // globals
 int numCats = 0;
-int maxCozySum = 0;
-int cozyLevels[MAX_CATS][MAX_FAMS] = {0};
-int catFriendship[MAX_CATS][MAX_CATS] = {0};
+int maxCozySum = -INF;
+int leastCozyCat = INF;
+int cozyLevels[MAX_CATS][MAX_FAMS];
+int catFriendship[MAX_CATS][MAX_CATS];
+int catFamily[MAX_CATS];
 
 
 // function prototype
@@ -27,44 +30,51 @@ void cozyCombo(int catIndex);
 void cozyCombo(int catIndex) 
 {
     // base case: stop when all cats are assigned
-    if (catIndex == numCats) return;
-
-
-    // iterate over each of the 3 families
-    for (int i = 0; i < MAX_FAMS; i++) 
+    if (catIndex == numCats) 
     {
-        // grab base cozy level 
-        int curCozyLevel = cozyLevels[catIndex][i];
+        int totalCozy = 0;
+        int minCozy = INF;
 
-
-        // declare & init max Fship level
-        int maxFriendship = 0;
-        // iterate over each cat
-        for (int j = 0; j < catIndex; j++) 
+        for (int i = 0; i < numCats; i++) 
         {
-            // check if the cur Fship level is greater than the maximum
-            if (catFriendship[catIndex][j] > maxFriendship)
+            totalCozy += cozyLevels[i][catFamily[i]];
+
+            for (int j = i + 1; j < numCats; j++) 
             {
-                // update max Fship level
-                maxFriendship = catFriendship[catIndex][j]; 
+                if (catFamily[i] == catFamily[j]) 
+                {
+                    totalCozy += catFriendship[i][j];
+                }
+            }
+
+            if (cozyLevels[i][catFamily[i]] < minCozy) 
+            {
+                minCozy = cozyLevels[i][catFamily[i]];
             }
         }
-        // add max Fship level to cur cozy level
-        curCozyLevel += maxFriendship;
+        if (totalCozy > maxCozySum) 
+        {
+            maxCozySum = totalCozy;
+            leastCozyCat = minCozy;
+        }
 
-        // update max cozy sum
-        maxCozySum += curCozyLevel;
-
-        // recursive call for next cat
-        cozyCombo(catIndex + 1);
-
+        return;
     }
+
+    // try all possible families for the current cat
+    for (int i = 0; i < MAX_FAMS; i++) 
+    {
+        catFamily[catIndex] = i;
+        cozyCombo(catIndex + 1);
+        catFamily[catIndex] = -1; // unassign the cat from the family
+    }
+
 }
+
 
 
 int main()
 {
-
     // read in the num of cats 
     scanf("%d", &numCats);
 
@@ -91,7 +101,7 @@ int main()
 
     // print max cozy sum
     printf("Max Cozy Sum [%d]\n", maxCozySum);
-
+    printf("Least Cozy Cat [%d]\n", leastCozyCat);
 
     return 0;
 }
