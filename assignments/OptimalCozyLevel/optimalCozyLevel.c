@@ -11,96 +11,90 @@
 // constants
 #define MAX_CATS 15
 #define MAX_FAMS 3
-#define INF 1e9
+#define MEGA_NUM 1e9
 
 // globals
 int numCats = 0;
-int maxCozySum = -INF;
-int leastCozyCat = INF;
+int maxCozySum = -MEGA_NUM;
+int leastCozyCat = -MEGA_NUM;
 int baseLevels[MAX_CATS][MAX_FAMS];
 int catFriendship[MAX_CATS][MAX_CATS];
 int assignedFamily[MAX_CATS];
 
 
-// function prototype
-void cozyCombo(int catIndex);
-
-
-// function definition 
-void cozyCombo(int catIndex) 
+int cozyCombo(int catIndex) 
 {
-    // base case: when all cats assigned
     if (catIndex == numCats) 
     {
-        int curCozy = 0;
-        int minCozy[MAX_FAMS];
+        // declare and init vars
+        int thisCozySum = 0;
+        int minCozyCat = MEGA_NUM;
 
-        // init minCozy array
-        for (int i = 0; i < MAX_FAMS; i++) 
-        {
-            minCozy[i] = INF;
-        }
+        // declare and init array to hold family cat count
+        int familyCatCounter[MAX_FAMS];
 
-        // iterate through each cat
         for (int i = 0; i < numCats; i++) 
-        {   
-            curCozy += baseLevels[i][assignedFamily[i]]; // grab base cozy level
-
-            for (int j = i + 1; j < numCats; j++) 
-            {
-                if (assignedFamily[i] == assignedFamily[j]) // if in same family
-                {
-                    curCozy += catFriendship[i][j]; // calculate friendship level
-                }
-            }
-
-            if (baseLevels[i][assignedFamily[i]] < minCozy[assignedFamily[i]]) 
-            {
-                minCozy[assignedFamily[i]] = baseLevels[i][assignedFamily[i]];
-            }
-
-            for (int j = i + 1; j < numCats; j++) 
-            {
-                if (assignedFamily[i] == assignedFamily[j]) // if in same family
-                {
-                    minCozy[assignedFamily[i]] += catFriendship[i][j]; // calculate friendship level
-                }
-            }
+        {
+            familyCatCounter[assignedFamily[i]]++;
         }
 
-        int curMin = -1;
+        // make sure each family has a cat
         for (int i = 0; i < MAX_FAMS; i++) 
         {
-            // if min cozy is less than curMin or curMin has not been set
-            if (curMin == -1 || minCozy[i] < curMin)
+            if (familyCatCounter[i] == 0) 
             {
-                curMin = minCozy[i];
+                return 0;
             }
         }
 
-        // if curCozy is greater than maxCozySum 
-        if (curCozy > maxCozySum)
+        // loop through each cat
+        for (int i = 0; i < numCats; i++) 
         {
-            maxCozySum = curCozy;
-        }
-        // if curMin is less than leastCozyCat
-        if (curMin < leastCozyCat) 
-        {
-            leastCozyCat = curMin;
+            int curCozy = baseLevels[i][assignedFamily[i]]; // grab base coziness 
+
+            // check for cats assigned in fam, add friendship (+/-)
+            for (int j = 0; j < numCats; j++) 
+            {
+                // if not itself and in same family
+                if (j != i && assignedFamily[j] == assignedFamily[i]) 
+                {
+                    curCozy += catFriendship[i][j]; // add friendship
+                }
+            }
+
+            // check for min cozy cat
+            if (curCozy < minCozyCat) 
+            {
+                minCozyCat = curCozy;
+            }
+
+            thisCozySum += curCozy; // update sum
         }
 
-        return;
+        // update max cozy if needed 
+        if (thisCozySum > maxCozySum) 
+        {
+            maxCozySum = thisCozySum;
+        }
+
+        // update the least cozy cat if needed
+        if (minCozyCat > leastCozyCat)
+        {
+            leastCozyCat = minCozyCat;
+        }
+
+        return 0;
     }
 
-    // try all possible families for the current cat
+    // try each family
     for (int i = 0; i < MAX_FAMS; i++) 
     {
         assignedFamily[catIndex] = i;
         cozyCombo(catIndex + 1);
-        assignedFamily[catIndex] = -1; // unassign the cat from the family
     }
-}
 
+    return 0;
+}
 
 
 int main()
@@ -116,6 +110,7 @@ int main()
             scanf("%d", &baseLevels[i][j]);
         }
     }
+    
     // based on num of cats, read in cat friendship levels 
     for (int i = 0; i < numCats; i++)
     {
@@ -125,13 +120,11 @@ int main()
         }
     }
 
-
-    // initial recursive call
+    // initial  call
     cozyCombo(0);
 
-    // print max cozy sum
-    printf("Max Cozy Sum [%d]\n", maxCozySum);
-    printf("Least Cozy Cat [%d]\n", leastCozyCat);
+    // print max cozy sum and least cozy cat
+    printf("%d %d\n", maxCozySum, leastCozyCat);
 
     return 0;
 }
