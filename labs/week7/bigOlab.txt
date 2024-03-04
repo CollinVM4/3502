@@ -1,0 +1,4 @@
+Big O, Iteration Technique
+
+    * dont use O(n/2), O(2n), it all == O(n)
+    * 

@@ -1,0 +1,25 @@
+assignment 4 notes
+
+    * use binary search after quick sort  
+    
+
+    Quick Sort 
+        * split in "half" (not exact half), sort by smaller than pivot or larger/equal to 
+
+        optimized quick sort 
+           * 3 containers, additional one for equal to pivot 
+
+            p
+          / | \        all arrays of size n 
+         s  =  b
+
+
+         to piece back together.... 
+            * join arrays together from smaller to largest, 
+            * indexes of s, indexes of =, indexes of b 
+
+            ssssss=======bbbbbb
+
+        base case if array size = 1
+    
+
