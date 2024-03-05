@@ -1,0 +1,64 @@
+
+Graph is a math model of data
+
+Two main parts
+    1. Vertex set - (items, nodes)
+    2. Edge set - (how the items relate to eachother)
+
+    picture a graph...
+        vertex set - {A, B, C, D}
+        edge set = {(A,B), (C,D), (A,D)}
+
+        A---B
+          \
+            \
+        C----D
+
+Tree
+    - acyclic (without cycle) and connected 
+
+    rooted tree 
+        - all edges point away from a special root node
+    
+    parent-child
+        * root has no parent                                o <- parent
+        * every non-root node has exactly 1 parent         / \
+                                                          o   o <- child
+
+            arrayList model
+
+                struct Node 
+                {
+                    Node * parent;
+                    int size, cap;
+                    Node ** children; 
+                }
+
+Binary Tree
+    - rooted tree where each Node has atmost 2 children (2, 1, or 0)
+    - nodes with 0 children are called leaves
+
+Traversals 
+    - how you explore a tree
+        all nodes are roots of their own tree
+
+
+        1. inorder traversal -binary trees only
+        2. pre-order    \
+                         - N-ary and binary
+        3. post-order   /
+    
+    tree deletion:
+
+        (post order)
+        delete(Node * root)
+
+            delete all children recursively 
+                then -> free(root)
+        
+        (pre order)
+            process root first
+            
+
+
+

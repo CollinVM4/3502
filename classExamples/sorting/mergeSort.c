@@ -7,6 +7,17 @@
         * sort (n/2)
         * merge 
     
+        time complexity
+            M(n) = 2M(n/2)  (add here)
+
+            add these to the end for...
+            best - N/2 (one side empty)
+            worst - n-1
+
+            however can just say its N (basically the same)
+
+            M(n) = 2M(n/2) + n
+
 
 */
 
