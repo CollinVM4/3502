@@ -50,15 +50,59 @@ Traversals
     
     tree deletion:
 
-        (post order)
+        (post-order)
         delete(Node * root)
 
             delete all children recursively 
                 then -> free(root)
         
-        (pre order)
+        (pre-order)
             process root first
-            
 
 
 
+Binary Search Trees 
+    - in a general rooted tree, how would you find a node with a specific value?
+       you could... linear search through pre-order
+    - use the root to eliminate nodes from search space 
+        the tree needs to be structured such that, nodes will not be improperly removed
+    - because of the comparison used on the root, elements smaller than the root are to one side, 
+        and elements greater than are on the other.
+
+            best  - Θ(1)
+            avg   - Θ(log(n))
+            worst - Θ(n)
+
+    have these functions...
+        - containment check (search)
+        - insert -- b Θ(n), a Θlog(n), w Θ(n)
+        - remove (find predecessor/ sucessor to replace...
+                    DO NOT slide children up)
+
+
+Balanced BST's
+
+    - use "tree rotation"
+    - change topology of tree
+    - maintain inorder traversal 
+
+    if inorder traversal, tree is a BST 
+
+    2 rotations
+        - left
+        - right 
+
+    to have rotations correctly 
+        use updated node structur
+
+        struct Node
+        {
+            data
+            Node * left, * right, * parent
+        }
+
+    "heaviness"
+        - depth of a node 
+            distance from the root to a node 
+        - height of a node
+            depth of deepest leaft - depth of self
