@@ -106,3 +106,47 @@ Balanced BST's
             distance from the root to a node 
         - height of a node
             depth of deepest leaft - depth of self
+
+
+    Pre-order  - Node, Left, Right
+    Post-order - Left, Right, Node
+    In-order   - Left, Node, Right
+
+
+
+
+    AVL Trees
+
+        - height is used to balance AVL
+        - Balance factor is the difference of heights btw/ 2 children
+                (left - right)
+        - Only 3 balance factors, [ -1, 0, 1 ]
+        - Look for imbalances from bottom to top
+        - 4 Imbalance cases
+            - imbalanced Node BF = 2
+
+
+        AVL insertion
+
+            current = inserted Node 
+            while(current != NULL)
+            {
+                if (current is imbalanced)
+                {
+                    rebalance(current);
+                    break;
+                }
+            current = parentOf(current)
+            }
+
+        AVL deletion
+
+            current = spo of Node removed
+            while(current != NULL)
+            {
+               if (imbalanced(current))
+               {
+                    rebalance(current);
+               } 
+            }
+            current = parentOf(current);
