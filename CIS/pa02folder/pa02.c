@@ -40,22 +40,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 // globals
 int checkSumSize; 
 int characterCnt = 0;
 int checkSum = 0;
 
 
-// checksum function
 void checkSumFunction(int character)
 {
     // calculate the checksum
-    checkSum += character;
+    checkSum += character; // add ASCII value of character to checksum
+
+    // apply bitwise AND based on checksum size
+    if (checkSumSize == 8) checkSum &= 0xFF; // for 8-bit checksum
+    else if (checkSumSize == 16) checkSum &= 0xFFFF; // for 16-bit checksum
+    else if (checkSumSize == 32) checkSum &= 0xFFFFFFFF; // for 32-bit checksum
 }
 
 
 int main(int argc, char **argv)
 {
+    printf("\n");
     // collect command line args 
     char *fileName = argv[1];
     checkSumSize = atoi(argv[2]);
@@ -70,7 +76,6 @@ int main(int argc, char **argv)
     // open the file provided
     FILE *mainFile = fopen(fileName, "r");
 
-
     // read and perform checkSum on the file
     while(1)
     {
@@ -81,13 +86,9 @@ int main(int argc, char **argv)
         characterCnt++; // increment character count
         checkSumFunction(character); // call checkSum
 
-        // use modulo to calulate remainder, remainder = checkSum
-        checkSum %= checkSumSize;
-
         // format to 80 chars per line
         if(characterCnt % 80 == 0) printf("\n");
     }
-
 
     // calculate the number of padding characters needed
     int padding = 0;
@@ -103,13 +104,9 @@ int main(int argc, char **argv)
         if(characterCnt % 80 == 0) printf("\n");
     }
 
-    // calculate the checksum
-    checkSum %= checkSumSize;
-
     // print ending data
     if (characterCnt % 80 != 0) printf("\n");
-    printf("%2d bit checksum is %8d for all %4d chars\n", checkSumSize, checkSum, characterCnt);
-
+    printf("%2d bit checksum is %8lx for all %4d chars\n", checkSumSize, (unsigned long)checkSum, characterCnt);
 
     return 0;
 }
