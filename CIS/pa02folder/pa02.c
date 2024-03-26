@@ -23,20 +23,6 @@
 +=============================================================================*/
 
 
-/*
-    Outline: 
-
-    1. Collect the command line input arguments and print them to the console. Remember to
-    remove or comment out this test code when running the testing scripts.
-    2. Read the file and print it out to the console.
-    3. Adjust the output to print 80 characters per line.
-    4. Calculate the 8 bit checksum. Remember that the checksum is a running total with no
-    overflow.
-    5. Resolve the calculations and padding for both 16 and 32 bit checksums.
-
-*/
-
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -44,27 +30,52 @@
 // globals
 int checkSumSize; 
 int characterCnt = 0;
-int checkSum = 0;
+unsigned long checkSum = 0;
 
 
-void checkSumFunction(int character)
+// calculates the checksum (8, 16, 32 bit paths) 
+void checkSumFunction(int character, int count)
 {
-    // calculate the checksum
-    checkSum += character; // add ASCII value of character to checksum
+    static int shift = 0; // shift variable
 
-    // apply bitwise AND based on checksum size
-    if (checkSumSize == 8) checkSum &= 0xFF; // for 8-bit checksum
-    else if (checkSumSize == 16) checkSum &= 0xFFFF; // for 16-bit checksum
-    else if (checkSumSize == 32) checkSum &= 0xFFFFFFFF; // for 32-bit checksum
+    if (checkSumSize == 8) // 8 bit
+    {
+        checkSum += character;
+        checkSum &= 0xFF; // "mask" to 8 bits
+    } 
+    else 
+    {
+        // bitwise shift left 8 bits and add the current character
+        shift = (shift << 8) + character;
+
+        if (count % (checkSumSize / 8) == 0)
+        {
+            checkSum += shift;
+            shift = 0;
+
+            if (checkSumSize == 16) // 16 bit
+            {
+                checkSum &= 0xFFFF; // "mask" to 16 bits
+            } 
+            if (checkSumSize == 32) // 32 bit
+            {
+                checkSum &= 0xFFFFFFFF; // "mask" to 32 bits
+            }
+        }
+    }
 }
 
 
 int main(int argc, char **argv)
 {
-    printf("\n");
+
+    printf("\n"); // formatting
+
+
     // collect command line args 
-    char *fileName = argv[1];
+    char *file = argv[1];
     checkSumSize = atoi(argv[2]);
+
 
     // validate checkSumSize
     if (checkSumSize != 8 && checkSumSize != 16 && checkSumSize != 32)
@@ -73,40 +84,64 @@ int main(int argc, char **argv)
         return 1;
     }
 
+
     // open the file provided
-    FILE *mainFile = fopen(fileName, "r");
+    FILE *mainFile = fopen(file, "r");
+
 
     // read and perform checkSum on the file
+    int count = 0;
     while(1)
     {
         int character = fgetc(mainFile); // grab current character
+
         if(character == EOF) break; // break if end of file
 
         printf("%c", character); // echo character
-        characterCnt++; // increment character count
-        checkSumFunction(character); // call checkSum
 
-        // format to 80 chars per line
-        if(characterCnt % 80 == 0) printf("\n");
+        characterCnt++; 
+        count++;
+        
+        checkSumFunction(character, count); 
+
+        if(characterCnt % 80 == 0) printf("\n"); // format 80 chars per line 
     }
 
-    // calculate the number of padding characters needed
-    int padding = 0;
-    if (checkSumSize == 16) padding = (2 - characterCnt % 2) % 2;
-    else if (checkSumSize == 32) padding = (4 - characterCnt % 4) % 4;
 
-    // add padding characters
+    // add padding if needed
+    int padding = 0;
+    if (checkSumSize == 16) padding = (2 - characterCnt % 2) % 2; // 16 bit
+    if (checkSumSize == 32) padding = (4 - characterCnt % 4) % 4; // 32 bit
+
     for (int i = 0; i < padding; i++) 
     {
         printf("X"); // print pad
-        checkSumFunction('X'); // call checkSum
-        characterCnt++; // increment character count
-        if(characterCnt % 80 == 0) printf("\n");
+        characterCnt++; 
+        checkSumFunction('X', characterCnt); // call checkSum
+
+        if(characterCnt % 80 == 0) printf("\n"); // format to 80 chars per line
     }
+
+
+    // resolve overflow
+    if (checkSumSize == 16)
+    {
+        checkSum %= 65536;
+    }
+    if (checkSumSize == 32)
+    {
+        checkSum %= 4294967296;
+    }
+
 
     // print ending data
     if (characterCnt % 80 != 0) printf("\n");
-    printf("%2d bit checksum is %8lx for all %4d chars\n", checkSumSize, (unsigned long)checkSum, characterCnt);
+    printf("%2d bit checksum is %8lx for all %4d chars\n", checkSumSize, checkSum, characterCnt);
+
+
+    // close file
+    fclose(mainFile);
+
 
     return 0;
 }
