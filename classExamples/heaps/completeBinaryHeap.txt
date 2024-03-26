@@ -1,0 +1,29 @@
+complete binary heap
+
+    * when using priority queue, removals go as such
+    * take highest priorty node, swap with bottom node
+    * "percolate" nodes below and see if they meet criteria for swap
+
+
+    How to avoid nodes
+
+    * use an array, mark index of each "node"
+
+            0      <- arr[0]
+           / \
+          1   2    <- arr[1],arr[2]
+
+
+          to find left child = 2i + 1
+          to find right child = 2i + 2  
+
+
+          parent of node I = (I - 1)/2  <- integer division a
+
+    Analysis
+
+        B       A       W
+eq      1       1     logN
+dq      1      logN   logN
+front   1       1       1
+                        

@@ -1,0 +1,29 @@
+Priority Queue 
+
+    functions:
+        add - give priority when adding
+        remove - always highest priority
+        front - pull highest priority
+
+    "Abstract Data Type"
+        * can be implemented in a number of ways
+            1. linked list - 
+                 * highest priority = head
+                 * must be sorted
+                 * avg. insertion = O(N) BAD 
+            2. BST - 
+                * avg. insertion = O(log(N))
+                * front = maximum left/right value
+
+                avl implementation
+                    best/avg/worst
+                    insertion       logN
+                    remove          logN
+                    front           logN
+
+            3. Heap - 
+                * ever node is the higest priority of its subtree
+                * root has the higest priority over everything
+
+                "complete binary heap"
+                

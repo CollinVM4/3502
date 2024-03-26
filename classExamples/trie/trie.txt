@@ -1,0 +1,34 @@
+Trie
+
+* help retrieve strings from a collection
+
+    uses a tree structure 
+
+* look up information stored along the edges from the root
+
+trie w/
+
+    "alice" "bob" "alex"
+
+                root
+               /    \
+              a      b
+             /        \
+            l          o 
+           / \          \
+          i   e          b () <- "bob"
+         /     \
+        c       x () <- "alex" 
+       /
+      e 
+      ()<- "alice"
+
+
+Node structure
+
+struct Node 
+{
+    int flag; // salary info, any data really...
+    int count; // w/e data you need
+    Node * children[26];
+}

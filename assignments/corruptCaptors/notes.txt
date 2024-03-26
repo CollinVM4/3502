@@ -1,0 +1,10 @@
+A5 Notes 
+
+
+    * BST - location must correspond to BST
+        * larger hat will be larger place
+    * use structure similar to a heap
+
+    first step  - put racoon in bst based on location
+    second step - promote racoon if he gets a bigger hat 
+    

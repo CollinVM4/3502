@@ -150,3 +150,26 @@ Balanced BST's
                } 
             }
             current = parentOf(current);
+
+
+        AVL insertion warm-up question
+            * BF = Left - Right "height" 
+            * all leafs are 0 BF
+
+
+    AVL RUNTIMES
+               B           A         W 
+insert        logN        logN      logN
+contains       1          logN      logN
+remove        logN        logN      logN
+
+
+
+
+review from lab: 
+
+    Delete a node from a tree 
+      find greatest value on the left or
+      least value on the right to replace deleted node
+
+      
