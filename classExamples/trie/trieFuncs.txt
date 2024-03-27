@@ -1,0 +1,33 @@
+Trie function types
+
+    1. Trie Traversal       <-- must be recursive
+        ex. printing tree
+    2. Path Traversal       <-- can iterative
+        ex. contains()
+
+
+
+    How could I count # of words that end with 'q'?
+
+
+
+
+    how many nodes are in the trie containing only the words
+    Alice 
+    Bob 
+    Carol 
+    Bravo
+    Alex
+    Car
+    Carasol
+
+        1. sort words
+
+            Alex    --> 5 
+            Alice   --> 3
+            Bob     --> 3
+            Bravo   --> 4 
+            Car     --> 3 
+            Carasol --> 4
+            Carol   --> 2 
+                        = 24;
