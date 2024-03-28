@@ -16,7 +16,7 @@
 // structs
 typedef struct Node 
 {
-    Node * left, * right, * parent;
+    struct Node * left, * right, * parent;
     int hat;
     int location;
     llint food; // llint = long long int
@@ -51,30 +51,6 @@ Node * createNode(int location, int hatSize)
     newNode->food = 0;
 
     return newNode; // return resulting node
-}
-
-
-// function with logic for inserting a new raccoon
-Node * insertRaccoon(Node * root, int location, int hatSize)
-{
-    // base case: empty tree (first raccoon)
-    if (root == NULL) return createNode(location, hatSize);
-
-    // recursive case: insert raccoon 
-    if (location < root->location) //  raccoon < root
-    {
-        // branch left
-        root->left = insertRaccoon(root->left, location, hatSize);
-        root->left->parent = root; // set parent to be root 
-    }
-    if (location > root->location) // raccoon > root
-    {
-        // branch right
-        root->right = insertRaccoon(root->right, location, hatSize);
-        root->right->parent = root; // set parent to be root 
-    }
-
-    return root; //returns the root of the tree
 }
 
 
@@ -187,16 +163,16 @@ Node * changeHat(Node * current, int hatSize)
         current->left = changeHat(current->left, hatSize);
     }
     // right subtree
-    if (hatSize > current->hat) 
+    else if (hatSize > current->hat) 
     {
         // change right hat
         current->right = changeHat(current->right, hatSize);
     }
 
-    // no change needed 
-    else 
+    // change hat if new hat is better
+    if (hatSize > current->hat)
     {
-        current->hat = hatSize; // keep the hat size
+        current->hat = hatSize; // change the hat size
     }
 
     return current; // return current node
@@ -333,9 +309,10 @@ Node * rotateRight(Node * current)
 }
 
 
+// end of function definitions
 
 
-
+// main function
 int main()
 {
     // init root
@@ -363,7 +340,10 @@ int main()
         {
             int location, hatSize;
             scanf("%d %d", &location, &hatSize); // read location and hat size
-            root = changeHat(location, hatSize); // change raccoon's hat
+            Node * node = findClosest(root, location); // find the node at the location
+            if (node != NULL) {
+                node = changeHat(node, hatSize); // change raccoon's hat
+            }
         }
         else if (command[0] == 'S') // STEAL X A
         {
@@ -383,4 +363,3 @@ int main()
 
     return 0;
 }
-
