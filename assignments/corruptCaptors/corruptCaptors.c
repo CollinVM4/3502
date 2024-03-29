@@ -36,6 +36,7 @@ void printTree(Node * root);
 void shareFood(Node * raccoon, int amt);
 
 
+// WORKS :D
 // function to add a new node to the tree
 Node * createNode(int location, int hatSize)
 {
@@ -53,7 +54,7 @@ Node * createNode(int location, int hatSize)
     return newNode; // return resulting node
 }
 
-
+// WORKS :D 
 // function with logic for inserting a new raccoon
 Node * insertRaccoon(Node * root, int location, int hatSize)
 {
@@ -67,7 +68,7 @@ Node * insertRaccoon(Node * root, int location, int hatSize)
         root->left = insertRaccoon(root->left, location, hatSize);
         root->left->parent = root; // set parent to be root 
     }
-    if (location > root->location) // raccoon > root
+    else if (location > root->location) // raccoon > root
     {
         // branch right
         root->right = insertRaccoon(root->right, location, hatSize);
@@ -81,7 +82,7 @@ Node * insertRaccoon(Node * root, int location, int hatSize)
     return root; //returns the root of the tree
 }
 
-
+// WORKS :D maybe 
 // function with logic for removing a raccoon AKA "Node Removal"
 Node * captureRaccoon(Node * root, int location)
 {
@@ -97,15 +98,15 @@ Node * captureRaccoon(Node * root, int location)
         root->left = captureRaccoon(root->left, location);
     }
     // right subtree
-    if (location > root->location) 
+    else if (location > root->location) 
     {
         // capture right
         root->right = captureRaccoon(root->right, location);
     }
-
     // location == root
     else 
     {
+        printf("%lld\n", root->food); // print food level upon capture
         // no children :C
         if (root->left == NULL && root->right == NULL)
         {
@@ -134,8 +135,6 @@ Node * captureRaccoon(Node * root, int location)
         }
     }
 
-
-
     // Perform rotations to maintain hat size hierarchy
     if (root != NULL)
     {
@@ -148,6 +147,7 @@ Node * captureRaccoon(Node * root, int location)
 }
 
 
+// WORKS :D 
 // function with logic for changing a raccoon's hat 
 Node * changeHat(Node * current, int hatSize)
 {
@@ -179,46 +179,45 @@ Node * changeHat(Node * current, int hatSize)
 }
 
 
+// WORKS :D
 // function with logic for finding the closest raccoon
 Node * findClosest(Node * root, int location)
 {
     Node * closest = NULL;
+    Node * currcurent = root;
+
     int minDistance = MEGA_NUM; // init and set to mega num (very very big)
 
+    Node * cur = root;
     // iterate through the tree
-    while (root != NULL)
+    while (cur != NULL)
     {
-        // calculate distance between raccoon and location
-        int distance = abs(root->location - location);
+        // calculate distance from current node to location
+        int distance = abs(cur->location - location);
 
-        // update closest and minDistance if new closest is found
-        if (distance < minDistance || (distance == minDistance && root->hat < closest->hat))
+        // update closest node if distance is less than minDistance and not the node itself
+        if (distance < minDistance && cur->location != location)
         {
-            closest = root;
             minDistance = distance;
+            closest = cur;
         }
 
-        // branch left
-        if (location < root->location)
+        // move to the left or right child based on the location
+        if (location < cur->location)
         {
-            root = root->left;
+            cur = cur->left;
         }
-        // branch right
-        else if (location > root->location)
-        {
-            root = root->right;
-        }
-        // equal, so break
         else
         {
-            break;
+            cur = cur->right;
         }
     }
 
-    return closest; // return closest raccoon
+    return closest;
 }
 
 
+// need to test
 // function with logic for stealing food
 void stealFood(Node * root, int location, int amt)
 {
@@ -232,6 +231,8 @@ void stealFood(Node * root, int location, int amt)
     shareFood(closest, amt);
 }
 
+
+// need to test
 // function with logic for sharing food
 void shareFood(Node * raccoon, int amt)
 {
@@ -252,7 +253,8 @@ void shareFood(Node * raccoon, int amt)
 }
 
 
-// funciton with logic for printing tree data
+// WORKS :D 
+// function with logic for printing tree data
 void printTree(Node * root)
 {  
     // base case: empty tree
@@ -262,13 +264,14 @@ void printTree(Node * root)
     printTree(root->left); 
 
     // print tree data 
-    printf("%d %d %lld\n", root->location, root->hat, root->food);
+    printf("%d %lld\n", root->location, root->food);
 
     // call for right subtree
     printTree(root->right); // call for right subtree
 }
 
 
+// NEED TO TEST
 // function with logic for rotating left 
 Node * rotateLeft(Node * current)
 {
@@ -289,6 +292,7 @@ Node * rotateLeft(Node * current)
 }
 
 
+// NEED TO TEST
 // function with logic for rotating right
 Node * rotateRight(Node * current)
 {
@@ -313,53 +317,84 @@ Node * rotateRight(Node * current)
 
 
 // main function
+// int main()
+// {
+//     // init root
+//     Node * root = NULL;  
+
+//     // command handling
+//     char command[5];
+//     while(1)
+//     {
+//         scanf("%s", command); // read command
+    
+//         if (command[0] == 'A') // ADD X H 
+//         {
+//             int location, hatSize;
+//             scanf("%d %d", &location, &hatSize); // read location and hat size
+//             root = insertRaccoon(root, location, hatSize); // insert raccoon
+//         }
+//         else if (command[0] == 'C') // CAPTURE X
+//         {
+//             int location;
+//             scanf("%d", &location); // read location
+//             root = captureRaccoon(root, location); // capture raccoon
+//         }
+//         else if (command[0] == 'H') // HAT X H 
+//         {
+//             int location, hatSize;
+//             scanf("%d %d", &location, &hatSize); // read location and hat size
+//             Node * node = findClosest(root, location); // find the node at the location
+//             if (node != NULL) {
+//                 node = changeHat(node, hatSize); // change raccoon's hat
+//             }
+//         }
+//         else if (command[0] == 'S') // STEAL X A
+//         {
+//             int location, amt;
+//             scanf("%d %d", &location, &amt); // read location and amount
+//             stealFood(root, location, amt); // steal food
+//         }
+//         else if (command[0] == 'Q') // QUIT 
+//         {
+//             break; // break command loop
+//         }
+
+//     }
+
+//     printf("hat [%d]\n", root->right->hat); 
+
+//     // print tree data
+//     printTree(root);
+
+//     return 0;
+// }
+
 int main()
 {
     // init root
     Node * root = NULL;  
 
-    // command handling
-    char command[5];
-    while(1)
-    {
-        scanf("%s", command); // read command
-    
-        if (command[0] == 'A') // ADD X H 
-        {
-            int location, hatSize;
-            scanf("%d %d", &location, &hatSize); // read location and hat size
-            root = insertRaccoon(root, location, hatSize); // insert raccoon
-        }
-        else if (command[0] == 'C') // CAPTURE X
-        {
-            int location;
-            scanf("%d", &location); // read location
-            root = captureRaccoon(root, location); // capture raccoon
-        }
-        else if (command[0] == 'H') // HAT X H 
-        {
-            int location, hatSize;
-            scanf("%d %d", &location, &hatSize); // read location and hat size
-            Node * node = findClosest(root, location); // find the node at the location
-            if (node != NULL) {
-                node = changeHat(node, hatSize); // change raccoon's hat
-            }
-        }
-        else if (command[0] == 'S') // STEAL X A
-        {
-            int location, amt;
-            scanf("%d %d", &location, &amt); // read location and amount
-            stealFood(root, location, amt); // steal food
-        }
-        else if (command[0] == 'Q') // QUIT 
-        {
-            break; // break command loop
-        }
+    // Add nodes
+    root = insertRaccoon(root, 10, 5); // Add raccoon at location 10 with hat size 5
+    root = insertRaccoon(root, 5, 3); // Add raccoon at location 5 with hat size 3
+    root = insertRaccoon(root, 11, 7); // Add raccoon at location 15 with hat size 7
 
+
+    Node * node = findClosest(root, 10); // find the node at the location 10
+
+    // Print tree data before changing hat
+    printf("Before changing hat:\n");
+    printf("node [%d] hat [%d]\n",node->location, node->hat);
+    // Change hat size
+    if (node != NULL) {
+        node = changeHat(node, 8); // change raccoon's hat to size 8
     }
 
-    // print tree data
-    printTree(root);
-
+    // Print tree data after changing hat
+    printf("After changing hat:\n");
+    printf("node [%d] hat [%d]\n",node->location, node->hat);
     return 0;
 }
+
+
