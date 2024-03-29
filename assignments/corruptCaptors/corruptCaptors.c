@@ -370,31 +370,28 @@ Node * rotateRight(Node * current)
 //     return 0;
 // }
 
+
+// in the middle of testing shareFood ran out of steam 
 int main()
 {
     // init root
     Node * root = NULL;  
 
     // Add nodes
-    root = insertRaccoon(root, 10, 5); // Add raccoon at location 10 with hat size 5
-    root = insertRaccoon(root, 5, 3); // Add raccoon at location 5 with hat size 3
-    root = insertRaccoon(root, 11, 7); // Add raccoon at location 15 with hat size 7
+    Node * share = insertRaccoon(root, 10, 10); // Add raccoon at location 10 with hat size 5
+    root = insertRaccoon(root, 5, 5); // Add raccoon at location 5 with hat size 3
+    Node * node = insertRaccoon(root, 15, 3); // Add raccoon at location 15 with hat size 7
 
+    // Print tree data before sharing food
+    printf("Before sharing food:\n");
+    printf("node[%d] food[%lld]\n", node->location, node->food);
+    
+    // Share food
+    shareFood(share, 20); // Share 20 food from raccoon at location 10
 
-    Node * node = findClosest(root, 10); // find the node at the location 10
+    // Print tree data after sharing food
+    printf("After sharing food:\n");
+    printf("node[%d] food[%lld]\n", node->location, node->food);
 
-    // Print tree data before changing hat
-    printf("Before changing hat:\n");
-    printf("node [%d] hat [%d]\n",node->location, node->hat);
-    // Change hat size
-    if (node != NULL) {
-        node = changeHat(node, 8); // change raccoon's hat to size 8
-    }
-
-    // Print tree data after changing hat
-    printf("After changing hat:\n");
-    printf("node [%d] hat [%d]\n",node->location, node->hat);
     return 0;
 }
-
-
