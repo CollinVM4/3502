@@ -1,0 +1,11 @@
+HW 5 suggestions
+
+Follows BST based on index and then Hat
+
+
+
+
+Rotations go as follows...
+
+    * raccoon inserted into tree structure.
+        * place at bottom and try to promote him.

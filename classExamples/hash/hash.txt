@@ -1,0 +1,71 @@
+Hash 
+    * fingerprint for your data
+
+
+    How might we store all the DNA of a group of 300 million people
+
+        1GB -> hash -> 4 bytes
+            * much easier to search through 
+
+    properties of Hash functions 
+        1. deterministic    : input will have consistent output 
+        2. well-distributed : avoid too many similair hashes (if possible)
+        3. hard to invert   : nice to have, good for sensitive info (crypto, communications)
+
+
+    Hash func examples
+        1. rand() - no srand() = BAD
+            use srand(input)
+
+        2. length - deterministic, not distributed
+            "alice" and "carol" hash to the same value
+
+        3. frequency of letter - deterministic, kind of distributed 
+            collisions caused by anagrams 
+                "rats" ----> "stars"
+        
+        4. folding - combining all elements of data together
+            "alice" = 'a' + 'l' + 'i' + 'c' + 'e'
+            also effected by anagrams 
+            susceptible to permutation
+
+        5. Radix/Polynomial/Rolling 
+            * turn input into polynomial
+
+            alice = 'a' + 'l' * x + 'i' * x^2 + 'c' * x^3 + 'e' * x^4
+
+            use % to make sure they dont go out of bounds 
+
+            a good x is a "generator" under your modulo
+
+            generator: can generate every possible remainder
+
+        
+    Hash table
+        * the "best" use of hash functions
+
+            represented by an array
+
+            hash is the index of the array
+
+            support 
+                * insert
+                * remove 
+                * containment 
+            insert(value)
+                index = hash(value)
+            array[index] = value
+
+        Collision Handling 
+            1. new hash function
+                * not feasable during execution 
+            2. probing
+                * try spaces that are nearby and avaible in the vicinity 
+                linear: try index + 1 and repeat until we find a spot  
+                quadratic: 
+            3. double-hash 
+                * tries two seperate locations, insert into first that works
+            4. chaining
+                * 
+
+
