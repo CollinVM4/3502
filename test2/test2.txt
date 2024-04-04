@@ -1,0 +1,42 @@
+Test 2 Notes
+
+
+Topics  
+
+    * Sorting
+        slow: Bubble, Insertion, Selection
+        fast: Quick, Merge
+        tracing
+        analysis 
+        code
+    * BST 
+        traversals
+        insertion, removal, containment
+        analysis
+        code
+
+    * AVL 
+        rotations
+        balance factor
+        insertion, removal, containment
+        analysis
+    * Tries
+        insertion, removal, containment
+        aggregation
+        analysis
+        code
+    * Heaps
+        EQ, DQ, Front
+        percolation
+        heapify
+        analysis
+        code
+    * Hashes 
+        insertion, removal, containment
+        hash functions
+        probing, linear & quadratic
+        chaining
+        analysis
+        code
+
+    

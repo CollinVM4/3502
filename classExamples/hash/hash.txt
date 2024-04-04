@@ -62,10 +62,16 @@ Hash
             2. probing
                 * try spaces that are nearby and avaible in the vicinity 
                 linear: try index + 1 and repeat until we find a spot  
-                quadratic: 
+                quadratic: try index + collisions^2
+                            use mod to wrap around if oob occurs
+                            ideally use prime # sized array
             3. double-hash 
                 * tries two seperate locations, insert into first that works
             4. chaining
-                * 
+                * avoids gaps in seqence from probing   
+                * inserts everything that hashes to a value to that location
+                * like a bucket/chain at the index
+                * usually implemented as a collection via LL
+                
 
 
