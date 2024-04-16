@@ -1,7 +1,6 @@
 /*
     - Collin Van Meter
     - COP3502 
-    - not finished, feel abt 70%  of the way there, some variables are still hard coded, commented out unfinished stuff, but hey, it kinda works.
 */
 
 // libraries used 

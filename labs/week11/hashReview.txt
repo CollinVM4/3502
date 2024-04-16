@@ -1,0 +1,9 @@
+
+
+
+
+
+
+hash set - 1 dimensional, only has the key
+
+has map - 2 dimensional, key-val pair
