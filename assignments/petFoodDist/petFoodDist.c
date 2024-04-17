@@ -8,6 +8,7 @@
 // libraries
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // structs
 typedef struct Node
@@ -17,26 +18,17 @@ typedef struct Node
     struct Node * children[32];
 } Node;
 
-typedef struct Sum 
-{
-    int minSum;
-    int maxSum;
-} Sum;
-
-
-// definitions
-#define MAX_FOOD_AMOUNT 1000
-
 // func prototypes
 Node * createNode();
 Node * addFamily(Node * root, char * response, int amount);
 Node * changeResponse(Node * root, char * oldResponse, char * newResponse);
-Sum sum(Node * root, char * response);
+int minSum(Node * root, char * response);
+int maxSum(Node * root, char * response);
 int mapCharToIndex(char c);
 int getAmount(Node * root, char * response);
+int sumAllChildren(Node *root);
 
 
-// func definitions
 
 // Function to create a node
 Node * createNode() 
@@ -58,60 +50,80 @@ Node * createNode()
 }
 
 
-// Function that inserts a word into a trie and returns the resulting root of the trie
+
 Node * addFamily(Node * root, char * response, int amount)
 {
+    printf("inside addFamily amount: %d\n", amount);
     // create root if no root exists
-    if(root == NULL)
+    if (root == NULL)
     {
         root = createNode();
     }
 
-    // increment subTrieAmount, add amount to myAmount
-    root->subTrieAmount++;
-    root->myAmount += amount;
+    // increment subTrieAmount for every node in the path
+    root->subTrieAmount += amount;
 
     // string is not empty
-    if(response[0] != '\0')
+    if (response[0] != '\0')
     {
         int index = mapCharToIndex(response[0]); // get index
         root->children[index] = addFamily(root->children[index], response + 1, amount); // add list of children
     }
 
+    // if the response ends at this node, increment myAmount
+    if (response[0] == '\0' || response[1] == '\0')
+    {
+        root->myAmount += amount;
+    }
+
     return root;
 }
-
 
 // change response 
 Node * changeResponse(Node * root, char * oldResponse, char * newResponse)
 {
-    root = addFamily(root, newResponse, getAmount(root, oldResponse)); // add new response
-    root = addFamily(root, oldResponse, -(getAmount(root, oldResponse))); // negate old response
+    int amount = getAmount(root, oldResponse);
+    int negationAmount = -(amount);
+    root = addFamily(root, oldResponse, negationAmount); // negate old response
+    root = addFamily(root, newResponse, amount); // add new response
     return root;
 }
 
+int minSum(Node * root, char * response)
+{
+    if (root == NULL) return 0;
 
-// function that gets the sum of responses
-Sum sum(Node * root, char * response) {
-    Sum result;
-    if (root == NULL) {
-        result.minSum = 0;
-        result.maxSum = 0;
-        return result;
+    if (response[0] == '\0')
+    {
+        return root->myAmount;
     }
 
-    // empty string
-    if (response[0] == '\0') {
-        result.minSum = root->myAmount;
-        result.maxSum = root->subTrieAmount * MAX_FOOD_AMOUNT;
-        return result;
-    }
-
-    // not empty string
     int index = mapCharToIndex(response[0]);
-    Sum childSum = sum(root->children[index], response + 1);
-    result.minSum = childSum.minSum + root->myAmount;
-    result.maxSum = childSum.maxSum + root->myAmount;
+    return minSum(root->children[index], response + 1);
+}
+
+int maxSum(Node * root, char * response)
+{
+    if (root == NULL) return 0;
+
+    int responseLen = strlen(response);
+    int result = 0;
+
+
+    for (int i = 0; i < responseLen; i++)
+    {
+        int index = mapCharToIndex(response[i]);
+        if (root->children[index] != NULL) 
+        {
+            result += root->children[index]->myAmount;
+            root = root->children[index]; // Move to the next node in the trie
+        } 
+        else
+        {
+            return result;
+        }
+    }
+    
     return result;
 }
 
@@ -119,9 +131,11 @@ Sum sum(Node * root, char * response) {
 // function that coverts chars to indexes
 int mapCharToIndex(char c)
 {
-    return c - 'A';
+    if ('a' <= c && c <= 'z') return c - 'a';
+    if ('A' <= c && c <= 'Z') return c - 'A' + 26;
+    if ('0' <= c && c <= '9') return c - '0' + 52;
+    return -1; // Return -1 for invalid characters
 }
-
 
 // function that grabs amount corresponding with a response
 int getAmount(Node * root, char * response)
@@ -138,11 +152,10 @@ int getAmount(Node * root, char * response)
 }
 
 
-
 int main()
 {
     // delcare and init max/min match values
-    int minMatches, maxMatches, amount = 0;
+    int amount = 0;
     char * response = (char *) malloc(32 * sizeof(char));
     char * oldResponse = (char *) malloc(32 * sizeof(char));
     char * newResponse = (char *) malloc(32 * sizeof(char));
@@ -163,15 +176,14 @@ int main()
         }
         else if (command[0] == 'C') // CHANGE R N
         {
-            scanf("%s %d", response, &amount);
+            scanf("%s %s", oldResponse, newResponse);
             root = changeResponse(root, oldResponse, newResponse);
         }
         else if (command[0] == 'S') // SUM R
         {
             // sum of fams that responded with R
             scanf("%s", response);
-            Sum result = sum(root, response);
-            printf("%d %d\n", result.minSum, result.maxSum);
+            printf("%d %d\n", minSum(root, response), maxSum(root, response));
         }
         else if (command[0] == 'Q') // QUIT
         {
@@ -182,3 +194,4 @@ int main()
     
     return 0;
 }
+
