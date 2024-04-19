@@ -1,0 +1,8 @@
+ADD abcde 34
+ADD abc 12
+ADD abc 43
+ADD abcd 13
+ADD a 15
+ADD ab 16
+SUM abc
+QUIT

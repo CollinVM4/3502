@@ -1,0 +1,4 @@
+CHANGE abc def
+SUM abc
+SUM def
+QUIT

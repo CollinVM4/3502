@@ -1,0 +1,4 @@
+ADD a 39
+ADD ab 14
+SUM abcdefg
+QUIT

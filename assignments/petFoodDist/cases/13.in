@@ -1,0 +1,12 @@
+ADD abc 15
+ADD a 2
+ADD abcd 23
+ADD def 13
+ADD de 4
+ADD defg 9
+CHANGE remain mindful
+SUM remain
+SUM mindful
+SUM a
+SUM d
+QUIT

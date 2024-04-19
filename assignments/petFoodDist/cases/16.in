@@ -1,0 +1,15 @@
+ADD abc 24
+ADD a 4
+ADD abcdef 19
+ADD def 20
+ADD d 5
+ADD defgh 12
+CHANGE abc abc
+CHANGE def def
+CHANGE d d
+CHANGE a a
+SUM d
+SUM a
+SUM abc
+SUM def
+QUIT

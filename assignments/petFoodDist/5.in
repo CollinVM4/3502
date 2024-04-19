@@ -1,0 +1,6 @@
+ADD abcde 26
+ADD ab 11
+ADD a 89
+ADD abcdefg 4
+SUM abc
+QUIT

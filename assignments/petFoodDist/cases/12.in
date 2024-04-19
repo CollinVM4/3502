@@ -1,0 +1,7 @@
+ADD abc 23
+ADD a 4
+ADD abcde 12
+CHANGE abc def
+SUM abc
+SUM def
+QUIT

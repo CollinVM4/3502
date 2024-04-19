@@ -1,0 +1,11 @@
+ADD abc 20
+ADD a 13
+ADD abcde 16
+ADD def 10
+ADD de 19
+ADD defg 3
+CHANGE cheese abc
+SUM abc
+SUM a
+SUM abcde
+QUIT

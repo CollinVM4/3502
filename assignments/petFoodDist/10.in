@@ -1,0 +1,11 @@
+ADD a 5
+ADD abc 12
+ADD abcd 15
+ADD de 2
+ADD def 17
+ADD defg 6
+CHANGE abc def
+SUM abc
+SUM def
+QUIT
+SUM 

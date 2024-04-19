@@ -1,0 +1,6 @@
+ADD abc 34
+ADD abc 20
+ADD a 15
+ADD abcde 5
+SUM abc
+QUIT

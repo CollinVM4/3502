@@ -1,0 +1,5 @@
+ADD abcd 45
+ADD ab 23
+ADD abcdefg 39
+SUM bc
+QUIT
